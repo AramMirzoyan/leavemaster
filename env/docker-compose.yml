@@ -1,0 +1,56 @@
+version: '3.5'
+services:
+  leavemaster-mysql-db:
+    image: mysql:8.4.2
+    container_name: leavemaster-mysql-db
+    ports:
+      - "3305:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: leavemaster
+    command:
+      --log-bin-trust-function-creators=1
+      --host_cache_size=0
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  leavemaster-keycloak:
+    image: quay.io/keycloak/keycloak:25.0.2
+    container_name: leavemaster-keycloak
+    environment:
+      - KC_DB=mysql
+      - KC_DB_URL_HOST=leavemaster-mysql-db
+      - KC_DB_URL_PORT=3306
+      - KC_DB_USERNAME=keycloaks
+      - KC_DB_PASSWORD=keycloak
+      - KC_DB_URL_DATABASE=keycloak_db
+      - KC_HOSTNAME=localhost
+      - KC_HOSTNAME_STRICT=false
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - PROXY_ADDRESS_FORWARDING=true
+    ports:
+      - '9595:8080'
+    depends_on:
+      leavemaster-mysql-db:
+        condition: service_healthy
+    volumes:
+      - leavemaster-keycloak-data-import:/opt/keycloak/data/import
+    command: start-dev
+
+
+volumes:
+  leavemaster-keycloak-data-import:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./keycloak/data/import
+  mysql-data:
+    driver: local

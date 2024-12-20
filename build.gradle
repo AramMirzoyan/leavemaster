@@ -1,0 +1,114 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.diffplug.spotless' version '6.20.0'
+    id 'checkstyle'
+}
+
+group = 'com.leave.master'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+        target 'src/**/*.java'
+        removeUnusedImports()
+        formatAnnotations()
+        importOrder 'java', 'javax', 'org', 'com'
+    }
+}
+
+checkstyle {
+    toolVersion = '10.12.4'
+    configFile = file('checkstyle.xml')
+    configProperties = [
+            'checkstyle.cache.file': "$buildDir/checkstyle-cachefile"
+    ]
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+
+
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'junit:junit:4.13.2'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'com.auth0:java-jwt:4.4.0'
+
+
+
+
+    implementation 'org.liquibase:liquibase-core:4.30.0'
+    implementation 'org.hibernate:hibernate-core:6.6.3.Final'
+    implementation 'io.vavr:vavr:0.10.4'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    implementation 'org.springframework.retry:spring-retry:2.0.10'
+    implementation 'org.springframework:spring-aspects:5.3.29'
+    implementation 'org.keycloak:keycloak-admin-client:25.0.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        html.required = true
+        xml.required = false
+        ignoreFailures = false
+        showViolations = true
+        sarif.required = true
+    }
+}
+
+tasks.register('validate', Checkstyle) {
+    group = 'verification'
+    description = 'Runs Checkstyle checks as part of the validation process.'
+    source = fileTree('src/main/java')
+    include '**/*.java'
+    exclude '**/generated/**'
+    doLast {
+        if (checkstyleReports.get().any { it.file.exists() }) {
+//            throw new GradleException('Checkstyle found violations. See the report for details.')
+        }
+    }
+}
+
+tasks.named('build') {
+    dependsOn('spotlessApply', 'spotlessCheck', 'bootJar')
+}
+

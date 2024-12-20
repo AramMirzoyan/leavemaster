@@ -1,0 +1,71 @@
+server:
+  servlet:
+    context-path: /leavemaster-app-api/v1
+  port: 8015
+
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3305/leavemaster}
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+
+  #spring security configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${leavemaster.security.keycloak.uri}/realms/${leavemaster.security.keycloak.realm}
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+
+
+  # liquibase configuration
+  liquibase:
+    change-log: classpath:/db/changelog-master.xml
+    contexts: dev
+
+#external api configuration
+external:
+  apiKey: ${API_KEY:api_key}
+  apiURL: ${API_URL:https://date.nager.at/api/v3/publicholidays/}
+  apiURLIsPublic: ${URL_IS_PUBLIC_HOLIDAY:https://date.nager.at/api/v3/IsTodayPublicHoliday}
+  countryCode: ${COUNTRY_CODE:AM}
+  zone: ${ZONE:Asia/Yerevan}
+
+
+unpaidLeave:
+  yearMaxDay: ${MAX_DAY_UNPAID_LEAVE:7}
+
+web:
+  cors:
+    origins: ${ALLOW_ORIGINS:*}
+
+leavemaster:
+  security:
+    keycloak:
+      uri: ${KEYCLOAK_URI:http://localhost:9595}
+      realm: ${KEYCLOAK_REALM:leavemaster}
+      clientId: ${KEYCLOAK_CLIENT_ID:leavemaster_client}
+      clientSecret: ${KEYCLOAK_CLIENT_SECRET:qwarte}
+      groupName: ${KEYCLOAK_GROUP_NAME:group_name}
+      tokenEndPoint: ${KEYCLOAK_TOKEN_END_POINT:/protocol/openid-connect/token}
+      admin:
+        realm: ${KEYCLOAK_ADMIN_REALM:master}
+        clientId: ${KEYCLOAK_ADMIN_CLIENT_ID:admin-cli}
+        clientSecret: ${KEYCLOAK_ADMIN_CLIENT_SECRET:client_secret}
+        username: ${KEYCLOAK_ADMIN_USERNAME:admin}
+        password: ${KEYCLOAK_ADMIN_PASSWORD:admin}
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+#        web:
+#          FilterChainProxy: TRACE

@@ -1,0 +1,18 @@
+package com.leave.master.leavemaster.dto.userdto;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+@SuperBuilder(toBuilder = true)
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserRequestDto extends AbstractUserDto {
+  @NotBlank(message = "password is mandatory")
+  private String password;
+
+  @NotBlank(message = "job title is mandatory")
+  private String jobTitle;
+}

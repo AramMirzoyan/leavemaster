@@ -103,7 +103,7 @@ tasks.register('validate', Checkstyle) {
     exclude '**/generated/**'
     doLast {
         if (checkstyleReports.get().any { it.file.exists() }) {
-//            throw new GradleException('Checkstyle found violations. See the report for details.')
+            throw new GradleException('Checkstyle found violations. See the report for details.')
         }
     }
 }

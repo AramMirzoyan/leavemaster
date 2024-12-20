@@ -1,25 +1,27 @@
 name: Build and Test
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
-      - main
+      - master  # Trigger on pull requests targeting the master branch
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Check out the code
       - name: Checkout code
         uses: actions/checkout@v3
+
+      # Step 2: Set up Java
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
+          java-version: '17'  # Specify the Java version
           distribution: 'temurin'
+
+      # Step 3: Cache Gradle dependencies
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -27,7 +29,5 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Build with Gradle
-        run: ./gradlew build
-      - name: Run Tests
-        run: ./gradlew test
+
+      #

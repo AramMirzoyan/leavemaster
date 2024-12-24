@@ -32,11 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 @EnableMethodSecurity(securedEnabled = true)
 @Slf4j
 public class SecurityConfig {
-  private static final String[] WHITE_LIST_URLS = {
-    "/auth/login",
-  };
+  private static final String[] WHITE_LIST_URLS = {"/auth/login"};
   private final JwtAuthConverter jwtAuthConverter;
-  private final LoginRequestValidationFilter validationFilter;
+//  private final LoginRequestValidationFilter validationFilter;
 
   @Value("${web.cors.origins}")
   private String allowedOrigins;
@@ -48,10 +46,10 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.authorizeHttpRequests(
             req -> {
-              req.requestMatchers(WHITE_LIST_URLS).permitAll();
+              req.requestMatchers("/auth/login","user/add").permitAll();
             })
         .httpBasic(Customizer.withDefaults())
-        .addFilterBefore(validationFilter, UsernamePasswordAuthenticationFilter.class)
+//        .addFilterBefore(validationFilter, UsernamePasswordAuthenticationFilter.class)
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
         .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)))

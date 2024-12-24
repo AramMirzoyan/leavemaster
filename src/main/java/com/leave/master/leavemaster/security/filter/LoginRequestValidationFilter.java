@@ -2,13 +2,10 @@ package com.leave.master.leavemaster.security.filter;
 
 import java.io.IOException;
 
-import org.springframework.stereotype.Component;
-import org.springframework.validation.DataBinder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.leave.master.leavemaster.dto.auth.LoginRequestDto;
 import com.leave.master.leavemaster.exceptiondendling.GlobalControllerExceptionHandler;
 import com.leave.master.leavemaster.exceptiondendling.MethodArgumentException;
 import com.leave.master.leavemaster.utils.Logging;
@@ -22,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+
 @RequiredArgsConstructor
 @Slf4j
 public class LoginRequestValidationFilter extends OncePerRequestFilter {
@@ -37,23 +34,24 @@ public class LoginRequestValidationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-    if (AUTH_PATH.equals(request.getServletPath()) && METHOD_POST.equals(request.getMethod())) {
-      Try.of(() -> objectMapper.readValue(request.getInputStream(), LoginRequestDto.class))
-          .andThenTry(
-              loginRequestDto -> {
-                Logging.onInfo(() -> "Start do bind login data");
-                var dataBinder = new DataBinder(loginRequestDto);
-                dataBinder.setValidator(validator);
-                dataBinder.validate();
-                var bindingResult = dataBinder.getBindingResult();
-                fieldValidator.validateBodyField(bindingResult);
-                Logging.onInfo(() -> "Finish do bind login data");
-              })
-          .onFailure(MethodArgumentException.class, ex -> handleValidationError(response, ex))
-          .onSuccess(ignored -> proceedWithFilterChain(filterChain, request, response));
-    } else {
-      proceedWithFilterChain(filterChain, request, response);
-    }
+//    if (AUTH_PATH.equals(request.getServletPath()) && METHOD_POST.equals(request.getMethod())) {
+//      Try.of(() -> objectMapper.readValue(request.getInputStream(), LoginRequestDtoTest.class))
+//          .andThenTry(
+//              loginRequestDto -> {
+//                Logging.onInfo(() -> "Start do bind login data");
+//                var dataBinder = new DataBinder(loginRequestDto);
+//                dataBinder.setValidator(validator);
+//                dataBinder.validate();
+//                var bindingResult = dataBinder.getBindingResult();
+//                fieldValidator.validateBodyField(bindingResult);
+//                Logging.onInfo(() -> "Finish do bind login data");
+//              })
+//          .onFailure(MethodArgumentException.class, ex -> handleValidationError(response, ex));
+////          .onSuccess(ignored -> proceedWithFilterChain(filterChain, request, response));
+//    } else {
+////      proceedWithFilterChain(filterChain, request, response);
+//    }
+//      proceedWithFilterChain(filterChain, request, response);
   }
 
   private void handleValidationError(HttpServletResponse response, MethodArgumentException ex) {
@@ -65,13 +63,13 @@ public class LoginRequestValidationFilter extends OncePerRequestFilter {
             })
         .onFailure(th -> Logging.onFailed(() -> "Unexpected Errors ".concat(th.getMessage())));
   }
-
-  private void proceedWithFilterChain(
-      final FilterChain filterChain,
-      final HttpServletRequest request,
-      final HttpServletResponse response) {
-    Try.run(() -> filterChain.doFilter(request, response))
-        .onFailure(
-            error -> Logging.onFailed(() -> "Unexpected Errors ".concat(error.getMessage())));
-  }
+//
+//  private void proceedWithFilterChain(
+//      final FilterChain filterChain,
+//      final HttpServletRequest request,
+//      final HttpServletResponse response) {
+//    Try.run(() -> filterChain.doFilter(request, response))
+//        .onFailure(
+//            error -> Logging.onFailed(() -> "Unexpected Errors ".concat(error.getMessage())));
+//  }
 }

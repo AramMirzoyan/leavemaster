@@ -1,22 +1,27 @@
 package com.leave.master.leavemaster.exceptiondendling;
 
-import static com.leave.master.leavemaster.exceptiondendling.ServiceErrorCode.PRECONDITION_FAILED;
+import com.leave.master.leavemaster.dto.GenResponse;
+import com.leave.master.leavemaster.dto.erorresponse.ErrorResponse;
+import com.leave.master.leavemaster.utils.Logging;
+import jakarta.ws.rs.NotAuthorizedException;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.leave.master.leavemaster.dto.GenResponse;
-
-import lombok.Builder;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Global exception handler for handling exceptions across all controllers. Logs exceptions and
@@ -26,58 +31,82 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalControllerExceptionHandler {
 
-  /**
-   * Handles {@link ServiceException} and formats a structured error response.
-   *
-   * @param ex the {@link ServiceException} being handled.
-   * @return a {@link ResponseEntity} containing the error details.
-   */
-  @ExceptionHandler(value = {ServiceException.class})
-  public ResponseEntity<GenResponse<CustomException>> serviceException(ServiceException ex) {
-    Map<String, String> error =
-        Map.of(
-            "Code",
-            String.valueOf(ex.getErrorCode()),
-            "Details",
-            String.join(" ", ex.getMessage()));
+    /**
+     * Handles {@link ServiceException} and formats a structured error response.
+     *
+     * @param ex the {@link ServiceException} being handled.
+     * @return a {@link ResponseEntity} containing the error details.
+     */
+    @ExceptionHandler(value = {ServiceException.class})
+    public ResponseEntity<GenResponse<CustomException>> serviceException(ServiceException ex) {
+        Map<String, String> error =
+                Map.of(
+                        "Code",
+                        String.valueOf(ex.getErrorCode()),
+                        "Details",
+                        String.join(" ", ex.getMessage()));
 
-    return new ResponseEntity<>(
-        GenResponse.error(
-            ServiceExceptionErrorResponse.builder().error(error).build(), ex::getMessage),
-        HttpStatus.valueOf(ex.getErrorCode()));
-  }
+        return new ResponseEntity<>(
+                GenResponse.error(
+                        ServiceExceptionErrorResponse.builder().error(error).build(), ex::getMessage),
+                HttpStatus.valueOf(ex.getErrorCode()));
+    }
 
-  @ExceptionHandler(MethodArgumentException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ResponseEntity<GenResponse<ErrorResponse>> methodArgumentNotValidException(
-      MethodArgumentException ex) {
-    List<ErrorDto> errorsFromFields = new ArrayList<>();
+    @ExceptionHandler(MethodArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<GenResponse<List<ErrorResponse>>> methodArgumentNotValidException(
+            MethodArgumentException ex) {
+        return new ResponseEntity<>(
+                GenResponse.validation(ex.getErrorResponses()),
+                HttpStatus.valueOf(ex.getErrorCode()));
+    }
 
-    ex.getErrorResponses()
-        .forEach(
-            errorResponse ->
-                errorsFromFields.add(
-                    new ErrorDto(errorResponse.getField(), errorResponse.getMessage())));
+    /**
+     * Handles NotAuthorizedException and maps it to an error response with HTTP status UNAUTHORIZED (401).
+     *
+     * @param ex The NotAuthorizedException that occurred.
+     * @return A GenResp<String> containing the error response.
+     */
+    @ResponseBody
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = {NotAuthorizedException.class})
+    public ResponseEntity<GenResponse<String>> accessDenied(NotAuthorizedException ex) {
+        Logging.onFailed(ex, ex::getMessage);
+        return new ResponseEntity<>(GenResponse.error("Access denied", ex::getMessage), HttpStatus.UNAUTHORIZED);
+    }
 
-    return new ResponseEntity<>(
-        GenResponse.validation(
-            ErrorResponse.builder()
-                .status(PRECONDITION_FAILED.getStatus().value())
-                .errorDtos(errorsFromFields)
-                .build()),
-        HttpStatus.valueOf(ex.getErrorCode()));
-  }
 
-  /** Represents a structured error response for {@link ServiceException}. */
-  @Builder
-  @Getter
-  public static class ServiceExceptionErrorResponse implements CustomException {
-    private Map<String, String> error;
-  }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = {HttpClientErrorException.Unauthorized.class})
+    public ResponseEntity<GenResponse<String>> accessDeniedUnauthorized(HttpClientErrorException.Unauthorized ex) {
+        Logging.onFailed(ex, ex::getMessage);
+        return new ResponseEntity<>(GenResponse.error("Invalid user credentials", ex::getMessage),
+                HttpStatus.UNAUTHORIZED);
+    }
 
-  @Builder
-  public record ErrorDto(String field, String message) {}
+    @ResponseBody
+    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    @ExceptionHandler({
+            BindException.class,
+            MethodArgumentNotValidException.class,
+            MissingServletRequestPartException.class
+    })
+    public ResponseEntity<GenResponse<List<ErrorResponse>>> methodArgumentNotValidException(BindException ex) {
+        final List<ErrorResponse> errors = new ArrayList<>();
+        ex.getAllErrors()
+                .forEach(error ->
+                        errors.add(new ErrorResponse(((FieldError) error).getField(), error.getDefaultMessage())));
 
-  @Builder
-  public record ErrorResponse(int status, List<ErrorDto> errorDtos) {}
+        return new ResponseEntity<>(GenResponse.validation(errors), HttpStatus.PRECONDITION_FAILED);
+    }
+
+    /**
+     * Represents a structured error response for {@link ServiceException}.
+     */
+    @Builder
+    @Getter
+    public static class ServiceExceptionErrorResponse implements CustomException {
+        private Map<String, String> error;
+    }
 }

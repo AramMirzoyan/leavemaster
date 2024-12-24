@@ -3,7 +3,12 @@ package com.leave.master.leavemaster.security.apiclient;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -27,9 +32,20 @@ public class ApiClient {
   private String kcIssueUri;
 
   public KcTokenResponse getTokenResponse(final LoginRequestDto source) {
-    return restTemplate
-        .postForEntity(tokenApiUri(), apiClientRequest.get(source), KcTokenResponse.class)
-        .getBody();
+    URI uri = tokenApiUri();
+    var  multiValueMapHttpEntity = apiClientRequest.get(source);
+//
+//    restTemplate.exchange(
+//            uri,
+//            HttpMethod.POST,
+//          multiValueMapHttpEntity,
+//          new ParameterizedTypeReference<KcTokenResponse>(){}
+//    );
+
+      return restTemplate
+              .postForEntity(uri, multiValueMapHttpEntity, KcTokenResponse.class).getBody();
+
+
   }
 
   private URI tokenApiUri() {

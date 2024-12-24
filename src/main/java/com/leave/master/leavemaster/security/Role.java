@@ -13,9 +13,9 @@ import lombok.Getter;
 @Getter
 public enum Role {
   @JsonProperty("security.role.admin")
-  SEC_ROLE_ADMIN(Name.R_SEC_ADMIN, "leavemaster", "admin access", "Admin"),
+  SEC_ROLE_ADMIN(Name.R_SEC_ADMIN, "leavemaster", "Administrator role for security", "Admin"),
   @JsonProperty("security.role.user")
-  SEC_ROLE_USER(Name.R_SEC_USER, "leavemaster", "user access", "User");
+  SEC_ROLE_USER(Name.R_SEC_USER, "leavemaster", "User role for security", "User");
 
   private static final Map<String, Role[]> mapping =
       Arrays.stream(Role.values())

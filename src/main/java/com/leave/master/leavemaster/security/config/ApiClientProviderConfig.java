@@ -31,11 +31,11 @@ public class ApiClientProviderConfig {
     return new SimpleTokenResponseAware(apiClientProperties::tokenResponseDto);
   }
 
-  @Bean
-  public RestTemplate restTemplate(RestTemplateBuilder builder) {
-    return builder
-        .setConnectTimeout(Duration.ofMillis(5_000))
-        .setReadTimeout(Duration.ofMillis(15_000))
-        .build();
-  }
+//  @Bean
+//  public RestTemplate restTemplate(RestTemplateBuilder builder) {
+//    return builder
+//        .setConnectTimeout(Duration.ofMillis(5_000))
+//        .setReadTimeout(Duration.ofMillis(15_000))
+//        .build();
+//  }
 }

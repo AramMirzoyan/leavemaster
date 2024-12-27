@@ -1,19 +1,21 @@
 package com.leave.master.leavemaster.interceptors;
 
-import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import static com.leave.master.leavemaster.interceptors.ClientAuthHeader.AUTH_CLIENT_APP_HEADER;
+import static com.leave.master.leavemaster.interceptors.ClientAuthHeader.CLIENT_APP_ADMIN_VALUE;
+
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.util.Objects;
+import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
 
-import static com.leave.master.leavemaster.interceptors.ClientAuthHeader.AUTH_CLIENT_APP_HEADER;
-import static com.leave.master.leavemaster.interceptors.ClientAuthHeader.CLIENT_APP_ADMIN_VALUE;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor

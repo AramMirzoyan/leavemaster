@@ -1,13 +1,15 @@
 package com.leave.master.leavemaster.exceptiondendling;
 
+import java.util.List;
+import java.util.function.Supplier;
+
+import org.springframework.http.HttpStatus;
+
 import com.leave.master.leavemaster.dto.erorresponse.ErrorResponse;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-
-import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * Custom exception class to handle service-related errors. Includes HTTP status, error message,

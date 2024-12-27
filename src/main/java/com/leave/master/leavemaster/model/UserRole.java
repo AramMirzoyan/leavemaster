@@ -2,6 +2,7 @@ package com.leave.master.leavemaster.model;
 
 import com.leave.master.leavemaster.model.converter.UserRoleConverter;
 import com.leave.master.leavemaster.model.enums.UserRoleEnum;
+
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,11 +1,11 @@
 package com.leave.master.leavemaster.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-
 import java.time.Instant;
 import java.util.Map;
 import java.util.function.Supplier;
+
+import lombok.Builder;
+import lombok.Getter;
 
 /**
  * A generic response wrapper class for API responses.

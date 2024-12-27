@@ -1,10 +1,11 @@
 package com.leave.master.leavemaster.converter;
 
-import io.vavr.control.Try;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import io.vavr.control.Try;
+import lombok.RequiredArgsConstructor;
 
 /** Resolves and delegates conversion operations to the appropriate {@link Converter}. */
 @Component

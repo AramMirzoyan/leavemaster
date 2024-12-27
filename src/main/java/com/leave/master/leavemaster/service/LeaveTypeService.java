@@ -1,8 +1,8 @@
 package com.leave.master.leavemaster.service;
 
-import com.leave.master.leavemaster.model.LeaveTypeEntity;
-
 import java.util.List;
+
+import com.leave.master.leavemaster.model.LeaveTypeEntity;
 
 /**
  * Service interface for managing leave types. Provides methods to retrieve leave type entities by

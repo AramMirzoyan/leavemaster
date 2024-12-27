@@ -1,10 +1,11 @@
 package com.leave.master.leavemaster.repository;
 
-import com.leave.master.leavemaster.model.LeaveTypeEntity;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.leave.master.leavemaster.model.LeaveTypeEntity;
 
 /**
  * Repository interface for managing {@link LeaveTypeEntity} entities. Provides methods for CRUD

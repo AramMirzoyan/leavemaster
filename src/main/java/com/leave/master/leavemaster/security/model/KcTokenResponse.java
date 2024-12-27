@@ -1,8 +1,8 @@
 package com.leave.master.leavemaster.security.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record KcTokenResponse(
     @JsonProperty("access_token") String accessToken,

@@ -1,30 +1,52 @@
 package com.leave.master.leavemaster.repository;
 
-import com.leave.master.leavemaster.dto.userdto.keycloak.KeycloakUserResponseDto;
-import com.leave.master.leavemaster.exceptiondendling.ServiceErrorCode;
-import com.leave.master.leavemaster.exceptiondendling.ServiceException;
-import com.leave.master.leavemaster.utils.Logging;
-import jakarta.ws.rs.core.Response;
-import org.keycloak.admin.client.CreatedResponseUtil;
-import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.admin.client.resource.UsersResource;
-import org.keycloak.representations.idm.RoleRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.keycloak.admin.client.CreatedResponseUtil;
+import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.RoleRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
+
+import com.leave.master.leavemaster.dto.userdto.keycloak.KeycloakUserResponseDto;
+import com.leave.master.leavemaster.exceptiondendling.ServiceErrorCode;
+import com.leave.master.leavemaster.exceptiondendling.ServiceException;
+import com.leave.master.leavemaster.utils.Logging;
+
+import jakarta.ws.rs.core.Response;
+
+/**
+ * Repository for managing Keycloak users. Provides methods for creating, retrieving, and checking
+ * the existence of users in Keycloak.
+ *
+ * <p>Designed to interact with the Keycloak Admin API, enabling simplified user management.
+ */
 public class KeycloakUserRepository {
 
   private final UsersResource usersResource;
 
+  /**
+   * Constructs a new KeycloakUserRepository with the specified {@link UsersResource}.
+   *
+   * @param usersResource the {@link UsersResource} used for Keycloak user operations.
+   */
   public KeycloakUserRepository(final UsersResource usersResource) {
     this.usersResource = usersResource;
   }
 
+  /**
+   * Creates a new user in Keycloak.
+   *
+   * <p>If the user is successfully created, retrieves and returns the user's details.
+   *
+   * @param userRepresentation the {@link UserRepresentation} of the user to create.
+   * @return a {@link KeycloakUserResponseDto} representing the created user.
+   * @throws ServiceException if the user creation fails.
+   */
   public KeycloakUserResponseDto save(final UserRepresentation userRepresentation) {
     try (var response = usersResource.create(userRepresentation)) {
       if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
@@ -42,6 +64,13 @@ public class KeycloakUserRepository {
     }
   }
 
+  /**
+   * Retrieves a user by their ID.
+   *
+   * @param userId the ID of the user to retrieve.
+   * @return a {@link KeycloakUserResponseDto} representing the user.
+   * @throws ServiceException if the user cannot be found.
+   */
   public KeycloakUserResponseDto getById(final String userId) {
     return Optional.ofNullable(usersResource.get(userId))
         .map(UserResource::toRepresentation)
@@ -62,6 +91,16 @@ public class KeycloakUserRepository {
                     () -> "User not found id: %s".formatted(userId)));
   }
 
+  /**
+   * Retrieves the roles of a user grouped by their client ID.
+   *
+   * <p>This method is private and not intended for external use. It demonstrates how to query user
+   * roles in Keycloak.
+   *
+   * @param userId the ID of the user whose roles to retrieve.
+   * @param userResource the {@link UserResource} of the user.
+   * @return a {@link Map} of client IDs to role names.
+   */
   private Map<String, List<String>> retrivUserRole(
       final String userId, final UserResource userResource) {
     return usersResource
@@ -76,9 +115,14 @@ public class KeycloakUserRepository {
                 Collectors.mapping(RoleRepresentation::getName, Collectors.toList())));
   }
 
-  public   boolean isUserExistByUsername(final String username){
+  /**
+   * Checks if a user exists in Keycloak by their username.
+   *
+   * @param username the username to search for.
+   * @return {@code true} if the user exists, {@code false} otherwise.
+   */
+  public boolean isUserExistByUsername(final String username) {
     List<UserRepresentation> search = usersResource.search(username, true);
-    return  search!=null && !search.isEmpty();
+    return search != null && !search.isEmpty();
   }
-
 }

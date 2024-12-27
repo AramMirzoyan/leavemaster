@@ -1,8 +1,8 @@
 package com.leave.master.leavemaster.security.model;
 
-import com.leave.master.leavemaster.dto.auth.TokenResponseDto;
-
 import java.util.Set;
+
+import com.leave.master.leavemaster.dto.auth.TokenResponseDto;
 
 @FunctionalInterface
 public interface TokenResponseAware {

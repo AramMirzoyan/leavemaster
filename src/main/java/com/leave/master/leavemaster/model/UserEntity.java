@@ -1,11 +1,12 @@
 package com.leave.master.leavemaster.model;
 
+import java.time.LocalDateTime;
+
 import com.leave.master.leavemaster.model.converter.UserStatusConverter;
 import com.leave.master.leavemaster.model.enums.UserStatus;
+
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Table(name = "user_entity")
 @Entity

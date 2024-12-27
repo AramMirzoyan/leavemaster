@@ -2,8 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
-//    id 'com.diffplug.spotless' version '6.20.0'
-//    id 'checkstyle'
+    id 'com.diffplug.spotless' version '6.20.0'
+    id 'checkstyle'
 }
 
 group = 'com.leave.master'
@@ -26,23 +26,23 @@ repositories {
     mavenLocal()
 }
 
-//spotless {
-//    java {
-//        googleJavaFormat()
-//        target 'src/**/*.java'
-//        removeUnusedImports()
-//        formatAnnotations()
-//        importOrder 'java', 'javax', 'org', 'com'
-//    }
-//}
-//
-//checkstyle {
-//    toolVersion = '10.12.4'
-//    configFile = file('checkstyle.xml')
-//    configProperties = [
-//            'checkstyle.cache.file': "$buildDir/checkstyle-cachefile"
-//    ]
-//}
+spotless {
+    java {
+        googleJavaFormat()
+        target 'src/**/*.java'
+        removeUnusedImports()
+        formatAnnotations()
+        importOrder 'java', 'javax', 'org', 'com'
+    }
+}
+
+checkstyle {
+    toolVersion = '10.12.4'
+    configFile = file('checkstyle.xml')
+    configProperties = [
+            'checkstyle.cache.file': "$buildDir/checkstyle-cachefile"
+    ]
+}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -85,30 +85,30 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-//tasks.withType(Checkstyle) {
-//    reports {
-//        html.required = true
-//        xml.required = false
-//        ignoreFailures = false
-//        showViolations = true
-//        sarif.required = true
-//    }
-//}
+tasks.withType(Checkstyle) {
+    reports {
+        html.required = true
+        xml.required = false
+        ignoreFailures = false
+        showViolations = true
+        sarif.required = true
+    }
+}
 
-//tasks.register('validate', Checkstyle) {
-//    group = 'verification'
-//    description = 'Runs Checkstyle checks as part of the validation process.'
-//    source = fileTree('src/main/java')
-//    include '**/*.java'
-//    exclude '**/generated/**'
-//    doLast {
-//        if (checkstyleReports.get().any { it.file.exists() }) {
-//            throw new GradleException('Checkstyle found violations. See the report for details.')
-//        }
-//    }
-//}
+tasks.register('validate', Checkstyle) {
+    group = 'verification'
+    description = 'Runs Checkstyle checks as part of the validation process.'
+    source = fileTree('src/main/java')
+    include '**/*.java'
+    exclude '**/generated/**'
+    doLast {
+        if (checkstyleReports.get().any { it.file.exists() }) {
+            throw new GradleException('Checkstyle found violations. See the report for details.')
+        }
+    }
+}
 
-//tasks.named('build') {
-//    dependsOn('spotlessApply', 'spotlessCheck', 'bootJar')
-//}
+tasks.named('build') {
+    dependsOn('spotlessApply', 'spotlessCheck', 'bootJar')
+}
 

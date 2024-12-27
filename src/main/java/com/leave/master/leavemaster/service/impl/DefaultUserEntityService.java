@@ -1,5 +1,8 @@
 package com.leave.master.leavemaster.service.impl;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
 import com.leave.master.leavemaster.converter.ConverterResolver;
 import com.leave.master.leavemaster.dto.userdto.UserRequestDto;
 import com.leave.master.leavemaster.dto.userdto.UserResponseDto;
@@ -14,11 +17,10 @@ import com.leave.master.leavemaster.repository.UserRoleRepository;
 import com.leave.master.leavemaster.security.Role;
 import com.leave.master.leavemaster.service.UserEntityService;
 import com.leave.master.leavemaster.service.keycloak.impl.DefaultKeycloakService;
+
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
 
 /**
  * Service implementation for managing user entities. Provides methods to create and manage user
@@ -86,6 +88,12 @@ public class DefaultUserEntityService implements UserEntityService {
         .getOrElseThrow(th -> new ServiceException(ServiceErrorCode.UNEXPECTED_ERROR));
   }
 
+  /**
+   * Finds a user by their email.
+   *
+   * @param email the email address of the user to find.
+   * @return a {@link Try} containing the {@link UserResponseDto} or an error.
+   */
   @Override
   public Try<UserResponseDto> findUserByEmail(final String email) {
 
@@ -98,11 +106,24 @@ public class DefaultUserEntityService implements UserEntityService {
     return null;
   }
 
+  /**
+   * Retrieves a user by their ID.
+   *
+   * @param id the ID of the user to retrieve.
+   * @return a {@link Try} containing the {@link UserResponseDto} or an error.
+   */
   @Override
   public Try<UserResponseDto> get(String id) {
     return null;
   }
 
+  /**
+   * Handles recovery from unexpected errors.
+   *
+   * @param th the throwable causing the error.
+   * @param <T> the type of the value being recovered.
+   * @return a {@link Try} containing the error wrapped in a {@link ServiceException}.
+   */
   private <T> Try<T> recoverFromUnexpectedError(Throwable th) {
     if (th instanceof DataIntegrityViolationException) {
       return Try.failure(new ServiceException(ServiceErrorCode.DUPLICATE_ENTRY, th::getMessage));

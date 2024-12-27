@@ -1,10 +1,11 @@
 package com.leave.master.leavemaster.security.model;
 
-import com.leave.master.leavemaster.dto.auth.LoginRequestDto;
+import java.util.function.Function;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.util.MultiValueMap;
 
-import java.util.function.Function;
+import com.leave.master.leavemaster.dto.auth.LoginRequestDto;
 
 public record DefaultApiClientRequest(
     Function<LoginRequestDto, HttpEntity<MultiValueMap<String, String>>> funHttpEntity)

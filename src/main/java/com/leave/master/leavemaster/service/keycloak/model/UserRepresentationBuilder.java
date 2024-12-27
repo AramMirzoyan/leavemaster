@@ -1,10 +1,10 @@
 package com.leave.master.leavemaster.service.keycloak.model;
 
+import org.keycloak.representations.idm.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.keycloak.representations.idm.*;
 
 public final class UserRepresentationBuilder extends UserRepresentation {
 

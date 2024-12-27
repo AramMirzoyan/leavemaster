@@ -1,13 +1,8 @@
 package com.leave.master.leavemaster.security.converter;
 
-import static com.leave.master.leavemaster.security.UserInfoConstant.*;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -19,16 +14,19 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.stereotype.Component;
 
-import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import lombok.RequiredArgsConstructor;
+import static com.leave.master.leavemaster.security.UserInfoConstant.PREFERRED_USERNAME;
+import static com.leave.master.leavemaster.security.UserInfoConstant.RESOURCE_ACCESS;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
   private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
-  private final LeaveMasterSecurityProperties leaveMasterSecurityProperties;
+  private final LeaveMasterSecurityProperties propert;
 
   @Override
   public AbstractAuthenticationToken convert(@NonNull Jwt jwt) {
@@ -36,7 +34,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         Stream.concat(
                 jwtGrantedAuthoritiesConverter.convert(jwt).stream(), extractResRoles(jwt).stream())
             .collect(Collectors.toSet());
-    return new JwtAuthenticationToken(jwt, authorities, getPrincipalClaimName(jwt));
+    return new JwtAuthenticationToken(jwt, authorities,getPrincipalClaimName(jwt));
   }
 
   private String getPrincipalClaimName(@NonNull Jwt jwt) {
@@ -47,30 +45,27 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
 
     return jwt.getClaim(claimName);
   }
-
   @SuppressWarnings("unchecked")
   private Collection<? extends GrantedAuthority> extractResRoles(@NonNull Jwt jwt) {
-    Map<String, Object> resourceAccess;
-    Map<String, Object> resource;
-    Collection<String> resourceRoles;
+    final Map<String, LinkedHashMap<String, Object>> resourceAccess=  jwt.getClaim(RESOURCE_ACCESS.getName());
+    Set<SimpleGrantedAuthority> accessRoles = new HashSet<>();
 
-    if (jwt.getClaim(RESOURCE_ACCESS.getName()) == null) {
-      return Collections.EMPTY_SET;
+    Map<String, Object> realmAccess = resourceAccess.get(propert.getKeycloak().getClientId());
+
+    final List<String> workerClientRoles = Objects.nonNull(realmAccess)
+            ? (List<String>) realmAccess.get("roles")
+            : Collections.emptyList();
+
+
+    if (CollectionUtils.isNotEmpty(workerClientRoles)) {
+      workerClientRoles.forEach(
+              role -> accessRoles.add(new SimpleGrantedAuthority("ROLE_" + role)));
     }
 
-    resourceAccess = jwt.getClaim(RESOURCE_ACCESS.getName());
-    if (resourceAccess.get(leaveMasterSecurityProperties.getKeycloak().getClientSecret()) == null) {
-      return Collections.EMPTY_SET;
-    }
-
-    resource =
-        (Map<String, Object>)
-            resourceAccess.get(leaveMasterSecurityProperties.getKeycloak().getClientSecret());
-
-    resourceRoles = (Collection<String>) resource.get(ROLES.getName());
-
-    return resourceRoles.stream()
-        .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX.getName() + role))
-        .collect(Collectors.toSet());
+    return accessRoles;
   }
+
+
+
+
 }

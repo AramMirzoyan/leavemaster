@@ -1,14 +1,14 @@
 package com.leave.master.leavemaster.converter.userentityconverter;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
 import com.leave.master.leavemaster.converter.Converter;
 import com.leave.master.leavemaster.dto.userdto.keycloak.KeycloakUserResponseDto;
 import com.leave.master.leavemaster.model.UserEntity;
 import com.leave.master.leavemaster.model.UserRole;
 import com.leave.master.leavemaster.model.enums.UserRoleEnum;
 import com.leave.master.leavemaster.model.enums.UserStatus;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class KeycloakResponseDtoConvertToUserEntity
     implements Converter<KeycloakUserResponseDto, UserEntity> {

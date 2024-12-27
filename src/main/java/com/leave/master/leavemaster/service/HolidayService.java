@@ -1,8 +1,8 @@
 package com.leave.master.leavemaster.service;
 
-import java.util.List;
-
 import com.leave.master.leavemaster.model.Holiday;
+
+import java.util.List;
 
 /** Interface defining operations for managing holiday data. */
 public interface HolidayService {

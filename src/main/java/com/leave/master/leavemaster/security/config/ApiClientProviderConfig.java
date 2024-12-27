@@ -1,19 +1,13 @@
 package com.leave.master.leavemaster.security.config;
 
-import java.time.Duration;
-
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
-
 import com.leave.master.leavemaster.security.model.ApiClientRequest;
 import com.leave.master.leavemaster.security.model.DefaultApiClientRequest;
 import com.leave.master.leavemaster.security.model.SimpleTokenResponseAware;
 import com.leave.master.leavemaster.security.model.TokenResponseAware;
 import com.leave.master.leavemaster.security.properties.ApiClientProperties;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor

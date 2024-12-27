@@ -1,16 +1,15 @@
 package com.leave.master.leavemaster.dto;
 
+import com.leave.master.leavemaster.exceptiondendling.ServiceErrorCode;
+import com.leave.master.leavemaster.exceptiondendling.ServiceException;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import com.leave.master.leavemaster.exceptiondendling.ServiceErrorCode;
-import com.leave.master.leavemaster.exceptiondendling.ServiceException;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /** Enum representing the response status for generic responses. */
 @Getter

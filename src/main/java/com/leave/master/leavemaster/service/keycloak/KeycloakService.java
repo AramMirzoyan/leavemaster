@@ -1,12 +1,11 @@
 package com.leave.master.leavemaster.service.keycloak;
 
-import java.util.List;
-import java.util.Set;
-
-import org.keycloak.representations.idm.UserRepresentation;
-
 import com.leave.master.leavemaster.dto.userdto.keycloak.KeycloakUserRequestDto;
 import com.leave.master.leavemaster.dto.userdto.keycloak.KeycloakUserResponseDto;
+import org.keycloak.representations.idm.UserRepresentation;
+
+import java.util.List;
+import java.util.Set;
 
 public interface KeycloakService {
 
@@ -15,4 +14,5 @@ public interface KeycloakService {
   List<UserRepresentation> getAllUser();
 
   Set<String> getRolesByUserName(String username);
-}
+
+ }

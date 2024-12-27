@@ -1,7 +1,7 @@
 package com.leave.master.leavemaster.security.config;
 
-import java.util.Objects;
-
+import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
+import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
@@ -10,9 +10,7 @@ import org.keycloak.admin.client.token.TokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
-
-import lombok.RequiredArgsConstructor;
+import java.util.Objects;
 
 @Configuration
 @RequiredArgsConstructor

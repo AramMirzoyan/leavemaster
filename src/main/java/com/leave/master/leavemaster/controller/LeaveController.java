@@ -1,18 +1,16 @@
 package com.leave.master.leavemaster.controller;
 
-import java.util.List;
-
+import com.leave.master.leavemaster.dto.GenResponse;
+import com.leave.master.leavemaster.model.LeaveTypeEntity;
+import com.leave.master.leavemaster.service.impl.DefaultLeaveTypeService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.leave.master.leavemaster.dto.GenResponse;
-import com.leave.master.leavemaster.model.LeaveTypeEntity;
-import com.leave.master.leavemaster.service.impl.DefaultLeaveTypeService;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

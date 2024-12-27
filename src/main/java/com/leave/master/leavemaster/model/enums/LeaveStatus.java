@@ -1,12 +1,12 @@
 package com.leave.master.leavemaster.model.enums;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /** Enum representing the status of a leave request. */
 @RequiredArgsConstructor

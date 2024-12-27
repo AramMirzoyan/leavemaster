@@ -1,8 +1,5 @@
 package com.leave.master.leavemaster.service.impl;
 
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-
 import com.leave.master.leavemaster.converter.ConverterResolver;
 import com.leave.master.leavemaster.dto.userdto.UserRequestDto;
 import com.leave.master.leavemaster.dto.userdto.UserResponseDto;
@@ -17,10 +14,11 @@ import com.leave.master.leavemaster.repository.UserRoleRepository;
 import com.leave.master.leavemaster.security.Role;
 import com.leave.master.leavemaster.service.UserEntityService;
 import com.leave.master.leavemaster.service.keycloak.impl.DefaultKeycloakService;
-
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 
 /**
  * Service implementation for managing user entities. Provides methods to create and manage user

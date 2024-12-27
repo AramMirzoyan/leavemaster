@@ -1,9 +1,7 @@
 package com.leave.master.leavemaster.service.external;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Objects;
-
+import com.leave.master.leavemaster.model.Holiday;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -16,9 +14,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.leave.master.leavemaster.model.Holiday;
-
-import lombok.extern.slf4j.Slf4j;
+import java.net.URI;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Component

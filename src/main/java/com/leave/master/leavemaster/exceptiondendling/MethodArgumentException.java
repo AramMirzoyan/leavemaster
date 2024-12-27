@@ -1,13 +1,11 @@
 package com.leave.master.leavemaster.exceptiondendling;
 
-import java.util.List;
-import java.util.function.Supplier;
-
+import com.leave.master.leavemaster.dto.erorresponse.ErrorResponse;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import com.leave.master.leavemaster.dto.erorresponse.ErrorResponse;
-
-import lombok.Getter;
+import java.util.List;
+import java.util.function.Supplier;
 
 @Getter
 public class MethodArgumentException extends ServiceException {

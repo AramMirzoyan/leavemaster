@@ -1,11 +1,13 @@
 package com.leave.master.leavemaster.dto.userdto;
 
 import com.leave.master.leavemaster.model.enums.UserRoleEnum;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder(toBuilder = true)

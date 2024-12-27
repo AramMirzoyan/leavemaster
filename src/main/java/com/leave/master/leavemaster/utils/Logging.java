@@ -1,15 +1,14 @@
 package com.leave.master.leavemaster.utils;
 
-import static lombok.AccessLevel.PRIVATE;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
+import org.springframework.util.Assert;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import org.springframework.lang.NonNull;
-import org.springframework.util.Assert;
-
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static lombok.AccessLevel.PRIVATE;
 
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)

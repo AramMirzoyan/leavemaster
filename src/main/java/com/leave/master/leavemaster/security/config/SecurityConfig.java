@@ -1,9 +1,8 @@
 package com.leave.master.leavemaster.security.config;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
-import java.util.List;
-
+import com.leave.master.leavemaster.security.converter.JwtAuthConverter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,16 +14,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.leave.master.leavemaster.security.converter.JwtAuthConverter;
-import com.leave.master.leavemaster.security.filter.LoginRequestValidationFilter;
+import java.util.List;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @RequiredArgsConstructor
@@ -34,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 public class SecurityConfig {
   private static final String[] WHITE_LIST_URLS = {"/auth/login"};
   private final JwtAuthConverter jwtAuthConverter;
-//  private final LoginRequestValidationFilter validationFilter;
 
   @Value("${web.cors.origins}")
   private String allowedOrigins;
@@ -46,10 +41,10 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.authorizeHttpRequests(
             req -> {
-              req.requestMatchers("/auth/login","user/add").permitAll();
+              req.requestMatchers(WHITE_LIST_URLS).permitAll();
+              req.requestMatchers(ctxPath+"/**").hasAnyRole("").anyRequest().authenticated();
             })
         .httpBasic(Customizer.withDefaults())
-//        .addFilterBefore(validationFilter, UsernamePasswordAuthenticationFilter.class)
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
         .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)))

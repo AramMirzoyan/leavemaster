@@ -1,21 +1,22 @@
 package com.leave.master.leavemaster.security;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.Getter;
-
 @Getter
 public enum Role {
   @JsonProperty("security.role.admin")
-  SEC_ROLE_ADMIN(Name.R_SEC_ADMIN, "leavemaster", "Administrator role for security", "Admin"),
+  SEC_ROLE_ADMIN(Name.R_SEC_ADMIN, "leavemaster", "Admin role for leavemaster_client",
+          "Admin","Administrator role for security"),
   @JsonProperty("security.role.user")
-  SEC_ROLE_USER(Name.R_SEC_USER, "leavemaster", "User role for security", "User");
+  SEC_ROLE_USER(Name.R_SEC_USER, "leavemaster", "User role for leavemaster_client",
+          "User","User role for security");
 
   private static final Map<String, Role[]> mapping =
       Arrays.stream(Role.values())
@@ -33,13 +34,15 @@ public enum Role {
   private final String access;
   private final String description;
   private final String userRoleType;
+  private final String realmDescription;
 
   Role(
-      final String name, final String access, final String description, final String userRoleType) {
+      final String name, final String access, final String description, final String userRoleType, final String realmDescription) {
     this.roleName = name.replaceFirst("ROLE_", "");
     this.access = access;
     this.description = description;
     this.userRoleType = userRoleType;
+    this.realmDescription=realmDescription;
     RoleMap.rolesMap.put(roleName, this);
   }
 

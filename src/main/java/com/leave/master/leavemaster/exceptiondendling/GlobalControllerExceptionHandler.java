@@ -3,12 +3,15 @@ package com.leave.master.leavemaster.exceptiondendling;
 import com.leave.master.leavemaster.dto.GenResponse;
 import com.leave.master.leavemaster.dto.erorresponse.ErrorResponse;
 import com.leave.master.leavemaster.utils.Logging;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotAuthorizedException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -84,6 +87,35 @@ public class GlobalControllerExceptionHandler {
         return new ResponseEntity<>(GenResponse.error("Invalid user credentials", ex::getMessage),
                 HttpStatus.UNAUTHORIZED);
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    public ResponseEntity<GenResponse<String>> accessDeniedException(AccessDeniedException ex) {
+        Logging.onFailed(ex, ex::getMessage);
+        return new ResponseEntity<>(GenResponse.error(ex.getMessage(), ex::getMessage),
+                HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(InvalidBearerTokenException.class)
+    public ResponseEntity<GenResponse<String>> invalidBearerTokenException(InvalidBearerTokenException ex) {
+        Logging.onFailed(ex, ex::getMessage);
+        return new ResponseEntity<>(GenResponse.error(ex.getMessage(), ex::getMessage),
+                HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<GenResponse<String>> jwtValidationException(BadRequestException ex) {
+        Logging.onFailed(ex, ex::getMessage);
+        return new ResponseEntity<>(GenResponse.error(ex.getMessage(), ex::getMessage),
+                HttpStatus.FORBIDDEN);
+    }
+
+
 
     @ResponseBody
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)

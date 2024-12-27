@@ -1,18 +1,16 @@
 package com.leave.master.leavemaster.service.keycloak.impl;
 
-import java.util.List;
-
+import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
+import com.leave.master.leavemaster.repository.KeycloakUserRepository;
+import io.vavr.control.Try;
+import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.ClientRepresentation;
 import org.springframework.lang.NonNull;
 
-import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
-import com.leave.master.leavemaster.repository.KeycloakUserRepository;
-
-import io.vavr.control.Try;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @RequiredArgsConstructor
 public abstract class AbstractKeycloakService {

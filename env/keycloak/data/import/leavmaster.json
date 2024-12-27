@@ -90,14 +90,56 @@
         "roles",
         "profile",
         "basic",
-        "email",
-        "offline_access"
+        "email"
       ],
       "optionalClientScopes": [
         "address",
         "phone",
         "offline_access",
         "microprofile-jwt"
+      ],
+      "protocolMappers": [
+        {
+          "id": "9ffa30dc-535f-4e1f-af8d-e72fcd6dc207",
+          "name": "audience resolve",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-resolve-mapper",
+          "consentRequired": false,
+          "config": {
+            "introspection.token.claim": "true",
+            "access.token.claim": "true"
+          }
+        },
+        {
+          "id": "c82e246a-e46e-4281-9456-e40f61ceefb5",
+          "name": "client roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-client-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "introspection.token.claim": "true",
+            "multivalued": "true",
+            "user.attribute": "foo",
+            "access.token.claim": "true",
+            "claim.name": "resource_access.${client_id}.roles",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "3679ecf8-8649-4c04-be5a-d466b7da50f2",
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "introspection.token.claim": "true",
+            "multivalued": "true",
+            "user.attribute": "foo",
+            "access.token.claim": "true",
+            "claim.name": "realm_access.roles",
+            "jsonType.label": "String"
+          }
+        }
       ],
       "access": {
         "view": true,
@@ -124,7 +166,12 @@
       ],
       "realmRoles": [
         "security.admin"
-      ]
+      ],
+      "clientRoles": {
+        "leavemaster_client": [
+          "security.admin"
+        ]
+      }
     }
   ],
   "roles": {
@@ -132,11 +179,49 @@
       {
         "name": "security.admin",
         "description": "Administrator role for security",
-        "composite": false,
+        "composite": true,
         "clientRole": false,
-        "containerId": "leavemaster-realm"
+        "containerId": "leavemaster-realm",
+        "composites": {
+          "client": {
+            "leavemaster_client": [
+              "security.admin"
+            ]
+          }
+        }
+      },
+      {
+        "name": "security.user",
+        "description": "User role for security",
+        "composite": true,
+        "clientRole": false,
+        "containerId": "leavemaster-realm",
+        "composites": {
+          "client": {
+            "leavemaster_client": [
+              "security.user"
+            ]
+          }
+        }
       }
     ],
-    "client": {}
+    "client": {
+      "leavemaster_client": [
+        {
+          "name": "security.admin",
+          "description": "Admin role for leavemaster_client",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "leavemaster_client"
+        },
+        {
+          "name": "security.user",
+          "description": "User role for leavemaster_client",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "leavemaster_client"
+        }
+      ]
+    }
   }
 }

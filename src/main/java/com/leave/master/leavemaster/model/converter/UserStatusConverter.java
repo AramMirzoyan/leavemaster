@@ -1,11 +1,9 @@
 package com.leave.master.leavemaster.model.converter;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.leave.master.leavemaster.model.enums.UserStatus;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Converter for the {@link UserStatus} enum to and from its database representation. Implements the

@@ -1,12 +1,11 @@
 package com.leave.master.leavemaster.repository;
 
-import java.util.Optional;
-
+import com.leave.master.leavemaster.model.UserRole;
+import com.leave.master.leavemaster.model.enums.UserRoleEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.leave.master.leavemaster.model.UserRole;
-import com.leave.master.leavemaster.model.enums.UserRoleEnum;
+import java.util.Optional;
 
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, String> {

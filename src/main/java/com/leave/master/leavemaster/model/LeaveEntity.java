@@ -1,15 +1,14 @@
 package com.leave.master.leavemaster.model;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
 import com.leave.master.leavemaster.model.enums.LeaveStatus;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "leave")

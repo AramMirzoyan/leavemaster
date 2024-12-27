@@ -1,9 +1,9 @@
 package com.leave.master.leavemaster.security.model;
 
+import com.leave.master.leavemaster.dto.auth.TokenResponseDto;
+
 import java.util.Set;
 import java.util.function.BiFunction;
-
-import com.leave.master.leavemaster.dto.auth.TokenResponseDto;
 
 public record SimpleTokenResponseAware(
     BiFunction<KcTokenResponse, Set<String>, TokenResponseDto> biFunc)

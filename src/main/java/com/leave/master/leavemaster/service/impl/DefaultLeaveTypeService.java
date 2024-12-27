@@ -1,20 +1,18 @@
 package com.leave.master.leavemaster.service.impl;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
 import com.leave.master.leavemaster.exceptiondendling.ServiceErrorCode;
 import com.leave.master.leavemaster.exceptiondendling.ServiceException;
 import com.leave.master.leavemaster.model.LeaveTypeEntity;
 import com.leave.master.leavemaster.repository.LeaveTypeRepository;
 import com.leave.master.leavemaster.service.LeaveTypeService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor

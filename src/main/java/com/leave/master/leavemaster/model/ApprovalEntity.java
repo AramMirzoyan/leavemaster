@@ -1,7 +1,6 @@
 package com.leave.master.leavemaster.model;
 
 import com.leave.master.leavemaster.model.enums.LeaveStatus;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

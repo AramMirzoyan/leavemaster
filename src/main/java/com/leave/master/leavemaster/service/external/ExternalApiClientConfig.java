@@ -1,8 +1,5 @@
 package com.leave.master.leavemaster.service.external;
 
-import java.net.SocketTimeoutException;
-import java.time.Duration;
-
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.classify.BinaryExceptionClassifier;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +11,9 @@ import org.springframework.retry.support.RetryTemplate;
 import org.springframework.retry.support.RetryTemplateBuilder;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.SocketTimeoutException;
+import java.time.Duration;
 
 /** Configuration class for setting up external API clients with retry and timeout settings. */
 @EnableRetry

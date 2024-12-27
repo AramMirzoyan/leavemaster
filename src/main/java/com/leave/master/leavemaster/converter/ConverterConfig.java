@@ -1,8 +1,5 @@
 package com.leave.master.leavemaster.converter;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.leave.master.leavemaster.converter.requestdtoconverter.UserRequestDtoConvertToKeycloakUserRequestDto;
 import com.leave.master.leavemaster.converter.roleconverter.SecurityRoleToUserRoleConverter;
 import com.leave.master.leavemaster.converter.roleconverter.UserRoleToSecurityConverter;
@@ -16,6 +13,8 @@ import com.leave.master.leavemaster.dto.userdto.keycloak.KeycloakUserResponseDto
 import com.leave.master.leavemaster.model.UserEntity;
 import com.leave.master.leavemaster.model.enums.UserRoleEnum;
 import com.leave.master.leavemaster.security.Role;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /** Configuration class for defining bean converters for user-related entities and DTOs. */
 @Configuration

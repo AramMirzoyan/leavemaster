@@ -1,24 +1,17 @@
 package com.leave.master.leavemaster.security.apiclient;
 
-import java.net.URI;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
 import com.leave.master.leavemaster.dto.auth.LoginRequestDto;
 import com.leave.master.leavemaster.security.model.ApiClientRequest;
 import com.leave.master.leavemaster.security.model.KcTokenResponse;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @Slf4j
 @Component

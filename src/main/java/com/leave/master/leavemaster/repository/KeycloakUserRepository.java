@@ -1,29 +1,27 @@
 package com.leave.master.leavemaster.repository;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import com.leave.master.leavemaster.dto.userdto.keycloak.KeycloakUserResponseDto;
+import com.leave.master.leavemaster.exceptiondendling.ServiceErrorCode;
+import com.leave.master.leavemaster.exceptiondendling.ServiceException;
+import com.leave.master.leavemaster.utils.Logging;
+import jakarta.ws.rs.core.Response;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
-import com.leave.master.leavemaster.dto.userdto.keycloak.KeycloakUserResponseDto;
-import com.leave.master.leavemaster.exceptiondendling.ServiceErrorCode;
-import com.leave.master.leavemaster.exceptiondendling.ServiceException;
-import com.leave.master.leavemaster.utils.Logging;
-
-import jakarta.ws.rs.core.Response;
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class KeycloakUserRepository {
 
   private final UsersResource usersResource;
 
-  public KeycloakUserRepository(UsersResource usersResource) {
+  public KeycloakUserRepository(final UsersResource usersResource) {
     this.usersResource = usersResource;
   }
 
@@ -77,4 +75,10 @@ public class KeycloakUserRepository {
                 RoleRepresentation::getContainerId, // Group by client ID
                 Collectors.mapping(RoleRepresentation::getName, Collectors.toList())));
   }
+
+  public   boolean isUserExistByUsername(final String username){
+    List<UserRepresentation> search = usersResource.search(username, true);
+    return  search!=null && !search.isEmpty();
+  }
+
 }

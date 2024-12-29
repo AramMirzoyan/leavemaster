@@ -16,10 +16,10 @@ public class Utils {
   /**
    * Checks if the provided content is {@code null} and logs a warning if it is.
    *
-   * @param <T>     the type of the content to check.
+   * @param <T> the type of the content to check.
    * @param content the content to validate for nullity.
    * @param message a {@link Supplier} providing the warning message to log if the content is {@code
-   *                null}.
+   *     null}.
    */
   public static <T> void isNull(final T content, final Supplier<String> message) {
     if (content == null) {

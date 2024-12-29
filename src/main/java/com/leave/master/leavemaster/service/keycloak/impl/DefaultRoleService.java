@@ -201,8 +201,7 @@ public class DefaultRoleService extends AbstractKeycloakService implements RoleS
         role -> {
           RoleRepresentation realmRoleRepresentation = createRealmRoleRepresentation(role);
           getRealmResource()
-              .onSuccess(
-                  resource ->  resource.roles().create(realmRoleRepresentation))
+              .onSuccess(resource -> resource.roles().create(realmRoleRepresentation))
               .onFailure(e -> log.error("Failed to add role: {}", role.getRoleName(), e));
         });
   }

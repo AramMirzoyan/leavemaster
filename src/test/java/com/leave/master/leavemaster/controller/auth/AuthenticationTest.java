@@ -3,12 +3,9 @@ package com.leave.master.leavemaster.controller.auth;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.provider.Arguments;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,15 +26,16 @@ class AuthenticationTest {
   @MockBean private HttpServletRequest httpServletRequest;
   @Autowired private Authentication authentication;
 
-  static Stream<Arguments> testLoginValidationFailedArguments() {
-    return Stream.of(
-        Arguments.of(
-            LoginRequestDto.builder().email("user@exaples.com").build(),
-            "password is mandatory",
-            "password"),
-        Arguments.of(
-            LoginRequestDto.builder().password("password").build(), "email is mandatory", "email"));
-  }
+  //  static Stream<Arguments> testLoginValidationFailedArguments() {
+  //    return Stream.of(
+  //        Arguments.of(
+  //            LoginRequestDto.builder().email("user@exaples.com").build(),
+  //            "password is mandatory",
+  //            "password"),
+  //        Arguments.of(
+  //            LoginRequestDto.builder().password("password").build(), "email is mandatory",
+  // "email"));
+  //  }
 
   @Test
   @DisplayName("Login should success ")

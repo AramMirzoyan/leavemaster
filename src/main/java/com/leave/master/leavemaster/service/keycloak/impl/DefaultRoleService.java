@@ -21,15 +21,35 @@ import com.leave.master.leavemaster.service.keycloak.RoleService;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Default implementation of {@link RoleService} for synchronizing roles with Keycloak.
+ *
+ * <p>This service handles synchronization of roles between the application and Keycloak, including
+ * client and realm roles. Ensure to override methods carefully if subclassing, maintaining the
+ * integrity of role synchronization logic.
+ */
 @Slf4j
 @Service
 public class DefaultRoleService extends AbstractKeycloakService implements RoleService {
 
+  /**
+   * Constructs a new {@code DefaultRoleService} with the provided Keycloak client and security
+   * properties.
+   *
+   * @param keycloak the Keycloak client used for role synchronization
+   * @param properties the security properties used for configuring role synchronization
+   */
   public DefaultRoleService(
       final Keycloak keycloak, final LeaveMasterSecurityProperties properties) {
     super(keycloak, properties);
   }
 
+  /**
+   * Synchronizes roles for the application with Keycloak.
+   *
+   * <p>If overriding, ensure that roles are prepared and synchronized correctly for both client and
+   * realm roles to maintain consistency between the application and Keycloak.
+   */
   @Override
   public void syncRoles() {
     syncRoles(Role.findAllByAccess("leavemaster"), getProperties().getKeycloak().getClientId());
@@ -182,9 +202,7 @@ public class DefaultRoleService extends AbstractKeycloakService implements RoleS
           RoleRepresentation realmRoleRepresentation = createRealmRoleRepresentation(role);
           getRealmResource()
               .onSuccess(
-                  resource -> {
-                    resource.roles().create(realmRoleRepresentation);
-                  })
+                  resource ->  resource.roles().create(realmRoleRepresentation))
               .onFailure(e -> log.error("Failed to add role: {}", role.getRoleName(), e));
         });
   }

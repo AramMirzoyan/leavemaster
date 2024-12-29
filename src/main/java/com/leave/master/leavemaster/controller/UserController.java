@@ -29,6 +29,8 @@ public class UserController {
    * Creates a new user from the provided request data.
    *
    * @param dto the {@link UserRequestDto} containing the user's data.
+   * @param bindingResult the {@link BindingResult} containing validation results for the provided
+   *     request data.
    * @return a {@link GenResponse} containing the created user's details.
    */
   @PostMapping("/add")

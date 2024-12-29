@@ -34,6 +34,7 @@ public class DefaultUserEntityService implements UserEntityService {
   private final ConverterResolver converterResolver;
   private final DefaultKeycloakService keycloakService;
   private final UserRoleRepository userRoleRepository;
+  private static final int ERROR_CODE = 400;
 
   /**
    * Creates a new user based on the provided {@link UserRequestDto}. Converts the request DTO to an
@@ -129,7 +130,7 @@ public class DefaultUserEntityService implements UserEntityService {
       return Try.failure(new ServiceException(ServiceErrorCode.DUPLICATE_ENTRY, th::getMessage));
     }
     if (th instanceof ServiceException ex) {
-      if (ex.getErrorCode() == 400) {
+      if (ex.getErrorCode() == ERROR_CODE) {
         return Try.failure(new ServiceException(ServiceErrorCode.BAD_REQUEST, th::getMessage));
       }
     }

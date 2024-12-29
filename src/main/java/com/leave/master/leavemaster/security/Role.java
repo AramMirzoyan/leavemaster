@@ -64,7 +64,7 @@ public enum Role {
     this.description = description;
     this.userRoleType = userRoleType;
     this.realmDescription = realmDescription;
-    RoleMap.rolesMap.put(roleName, this);
+    RoleMap.ROLES_MAP.put(roleName, this);
   }
 
   /**
@@ -74,7 +74,7 @@ public enum Role {
    * @return the {@link Role} corresponding to the name, or {@code null} if not found.
    */
   public static Role findByName(String name) {
-    return RoleMap.rolesMap.get(name);
+    return RoleMap.ROLES_MAP.get(name);
   }
 
   /**
@@ -105,6 +105,6 @@ public enum Role {
 
   /** Internal mapping of role names to their {@link Role} instances. */
   private record RoleMap() {
-    private static final Map<String, Role> rolesMap = new HashMap<>();
+    private static final Map<String, Role> ROLES_MAP = new HashMap<>();
   }
 }

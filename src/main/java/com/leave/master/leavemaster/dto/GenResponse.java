@@ -51,6 +51,14 @@ public class GenResponse<T> {
         .build();
   }
 
+  /**
+   * Creates a successful {@link GenResponse} with the provided data and message.
+   *
+   * @param <T> the type of the response data.
+   * @param data the data to include in the response.
+   * @param message a {@link Supplier} providing the success message for the response.
+   * @return a {@link GenResponse} containing the provided data, message, and additional metadata.
+   */
   public static <T> GenResponse<T> success(T data, Supplier<String> message) {
     return GenResponse.<T>builder()
         .status(GenRespStatus.SUCCESS.getValue())

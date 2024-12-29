@@ -18,7 +18,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'  # Specify the Java version
+          java-version: '21'
           distribution: 'temurin'
 
       # Step 3: Cache Gradle dependencies
@@ -30,4 +30,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      #
+      # Step 4: Clean and Build the Project
+      - name: Clean and Build with Gradle
+        run: ./gradlew clean build
+
+      # Step 5: Run Tests
+      - name: Run Tests
+        run: ./gradlew clean test

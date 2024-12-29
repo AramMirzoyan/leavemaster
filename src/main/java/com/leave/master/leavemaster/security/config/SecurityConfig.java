@@ -15,43 +15,55 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.leave.master.leavemaster.security.converter.JwtAuthConverter;
-import com.leave.master.leavemaster.security.filter.LoginRequestValidationFilter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Security configuration for the application.
+ *
+ * <p>This class configures security features such as authentication, authorization, and CORS.
+ */
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 @Slf4j
 public class SecurityConfig {
-  private static final String[] WHITE_LIST_URLS = {
-    "/auth/login",
-  };
+  private static final String[] WHITE_LIST_URLS = {"/auth/login"};
   private final JwtAuthConverter jwtAuthConverter;
-  private final LoginRequestValidationFilter validationFilter;
 
   @Value("${web.cors.origins}")
   private String allowedOrigins;
 
+  private static final long CORS_MAX_AGE = 3600L; // Max age for CORS preflight requests
+
   @Value("${server.servlet.context-path}")
   private String ctxPath;
 
+  /**
+   * Configures the security filter chain for the application.
+   *
+   * <p>This includes disabling CSRF, setting session management to stateless, and enabling OAuth2
+   * resource server support.
+   *
+   * @param http the {@link HttpSecurity} to configure.
+   * @return the configured {@link SecurityFilterChain}.
+   * @throws Exception if an error occurs during configuration.
+   */
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.authorizeHttpRequests(
             req -> {
               req.requestMatchers(WHITE_LIST_URLS).permitAll();
+              req.requestMatchers(ctxPath + "/**").hasAnyRole("").anyRequest().authenticated();
             })
         .httpBasic(Customizer.withDefaults())
-        .addFilterBefore(validationFilter, UsernamePasswordAuthenticationFilter.class)
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
         .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)))
@@ -59,18 +71,30 @@ public class SecurityConfig {
         .build();
   }
 
+  /**
+   * Provides a password encoder bean using BCrypt hashing algorithm.
+   *
+   * @return a {@link PasswordEncoder} instance.
+   */
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
+  /**
+   * Configures the CORS settings for the application.
+   *
+   * <p>This allows all methods and headers from the origins defined in the application properties.
+   *
+   * @return the {@link CorsConfigurationSource} for CORS settings.
+   */
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(List.of(allowedOrigins));
     configuration.setAllowedMethods(List.of("*"));
     configuration.setAllowedHeaders(List.of("*"));
-    configuration.setMaxAge(3600L);
+    configuration.setMaxAge(CORS_MAX_AGE);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;

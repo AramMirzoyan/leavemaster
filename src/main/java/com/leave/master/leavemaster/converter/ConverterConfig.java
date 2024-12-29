@@ -41,22 +41,48 @@ public class ConverterConfig {
     return new EntityToUserDtoConverter();
   }
 
+  /**
+   * Provides a converter bean to transform a {@link Role} to a {@link UserRoleEnum}.
+   *
+   * @return a {@link Converter} that maps security roles to user roles.
+   * @implSpec This method can be overridden if a custom role mapping logic is required.
+   */
   @Bean
   public Converter<Role, UserRoleEnum> securityRoleToUserRole() {
     return new SecurityRoleToUserRoleConverter();
   }
 
+  /**
+   * Provides a converter bean to transform a {@link UserRoleEnum} to a {@link Role}.
+   *
+   * @return a {@link Converter} that maps user roles to security roles.
+   * @implSpec This method can be overridden to adapt different role conversion logic.
+   */
   @Bean
   public Converter<UserRoleEnum, Role> userRoleToSecurityRole() {
     return new UserRoleToSecurityConverter();
   }
 
+  /**
+   * Provides a converter bean to transform a {@link UserRequestDto} to a {@link
+   * KeycloakUserRequestDto}.
+   *
+   * @return a {@link Converter} that maps user roles to security roles.
+   * @implSpec This method can be overridden to adapt different role conversion logic.
+   */
   @Bean
   public Converter<UserRequestDto, KeycloakUserRequestDto>
       userRequestDtoKeycloakUserRequestDtoConverter() {
     return new UserRequestDtoConvertToKeycloakUserRequestDto();
   }
 
+  /**
+   * Provides a converter bean to transform a {@link KeycloakUserResponseDto} to a {@link
+   * UserEntity}.
+   *
+   * @return a {@link Converter} that maps user roles to security roles.
+   * @implSpec This method can be overridden to adapt different role conversion logic.
+   */
   @Bean
   public Converter<KeycloakUserResponseDto, UserEntity> keycloakResponseDtoConvertToUserEntity() {
     return new KeycloakResponseDtoConvertToUserEntity();

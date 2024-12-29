@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 
 import com.leave.master.leavemaster.model.enums.UserStatus;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder(toBuilder = true)

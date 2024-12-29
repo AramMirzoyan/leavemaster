@@ -42,7 +42,7 @@ services:
         condition: service_healthy
     volumes:
       - leavemaster-keycloak-data-import:/opt/keycloak/data/import
-    command: start-dev
+    command: start-dev --import-realm
 
 
 volumes:

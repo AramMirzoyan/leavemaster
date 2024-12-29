@@ -22,6 +22,11 @@ import com.leave.master.leavemaster.security.model.KcTokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Component class for managing API client properties and related operations.
+ *
+ * <p>Provides methods for constructing HTTP requests and processing token responses.
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +34,14 @@ public class ApiClientProperties {
 
   @Lazy private final HttpHeaders headers;
 
+  /**
+   * Creates an HTTP request entity from the given login request source.
+   *
+   * <p>Subclasses can override this method to customize the request construction logic.
+   *
+   * @param source the {@link LoginRequestDto} containing login request details.
+   * @return an {@link HttpEntity} containing the request parameters and headers.
+   */
   public HttpEntity<MultiValueMap<String, String>> requestFromSource(final LoginRequestDto source) {
     final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("username", source.getEmail());
@@ -39,6 +52,15 @@ public class ApiClientProperties {
     return new HttpEntity<>(params, headers);
   }
 
+  /**
+   * Constructs a {@link TokenResponseDto} from the given token response and roles.
+   *
+   * <p>Subclasses can override this method to customize token response processing.
+   *
+   * @param tokenBody the {@link KcTokenResponse} containing token details.
+   * @param roles a set of roles associated with the token.
+   * @return a {@link TokenResponseDto} containing processed token details.
+   */
   public TokenResponseDto tokenResponseDto(final KcTokenResponse tokenBody, Set<String> roles) {
     var jwt = decodedJWTFromBody(tokenBody.accessToken());
     return TokenResponseDto.builder()
@@ -52,6 +74,14 @@ public class ApiClientProperties {
         .build();
   }
 
+  /**
+   * Decodes a JWT access token.
+   *
+   * <p>This method is private and intended for internal use only.
+   *
+   * @param accessToken the access token to decode.
+   * @return a {@link DecodedJWT} instance.
+   */
   private DecodedJWT decodedJWTFromBody(final String accessToken) {
     return JWT.decode(accessToken);
   }

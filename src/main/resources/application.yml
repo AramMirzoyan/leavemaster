@@ -50,11 +50,11 @@ leavemaster:
   security:
     keycloak:
       uri: ${KEYCLOAK_URI:http://localhost:9595}
-      realm: ${KEYCLOAK_REALM:leavemaster}
+      realm: ${KEYCLOAK_REALM:leavemaster-realm}
       clientId: ${KEYCLOAK_CLIENT_ID:leavemaster_client}
       clientSecret: ${KEYCLOAK_CLIENT_SECRET:qwarte}
       groupName: ${KEYCLOAK_GROUP_NAME:group_name}
-      tokenEndPoint: ${KEYCLOAK_TOKEN_END_POINT:/protocol/openid-connect/token}
+      tokenEndPoint: ${KEYCLOAK_TOKEN_END_POINT:protocol/openid-connect/token}
       admin:
         realm: ${KEYCLOAK_ADMIN_REALM:master}
         clientId: ${KEYCLOAK_ADMIN_CLIENT_ID:admin-cli}

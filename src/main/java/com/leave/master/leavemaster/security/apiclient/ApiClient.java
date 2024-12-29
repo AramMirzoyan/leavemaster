@@ -15,6 +15,11 @@ import com.leave.master.leavemaster.security.model.KcTokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * API client for interacting with Keycloak's token API.
+ *
+ * <p>Handles token retrieval and constructs URIs for API interactions.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -26,12 +31,25 @@ public class ApiClient {
   @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
   private String kcIssueUri;
 
+  /**
+   * Retrieves a token response from the Keycloak API.
+   *
+   * @param source the {@link LoginRequestDto} containing login credentials.
+   * @return a {@link KcTokenResponse} containing the token details.
+   */
   public KcTokenResponse getTokenResponse(final LoginRequestDto source) {
+    URI uri = tokenApiUri();
+    var multiValueMapHttpEntity = apiClientRequest.get(source);
     return restTemplate
-        .postForEntity(tokenApiUri(), apiClientRequest.get(source), KcTokenResponse.class)
+        .postForEntity(uri, multiValueMapHttpEntity, KcTokenResponse.class)
         .getBody();
   }
 
+  /**
+   * Constructs the URI for the token API endpoint.
+   *
+   * @return the {@link URI} for the token API.
+   */
   private URI tokenApiUri() {
     return appBaseUriBuilder()
         .pathSegment(properties.getKeycloak().getTokenEndPoint())
@@ -39,6 +57,11 @@ public class ApiClient {
         .toUri();
   }
 
+  /**
+   * Builds the base URI for Keycloak interactions.
+   *
+   * @return a {@link UriComponentsBuilder} for constructing Keycloak API URIs.
+   */
   private UriComponentsBuilder appBaseUriBuilder() {
     return UriComponentsBuilder.fromHttpUrl(kcIssueUri);
   }

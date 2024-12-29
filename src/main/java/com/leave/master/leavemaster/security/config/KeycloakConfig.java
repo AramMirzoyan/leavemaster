@@ -14,12 +14,26 @@ import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Configuration class for Keycloak integration.
+ *
+ * <p>Provides beans for configuring the Keycloak client and token service. Designed for extension
+ * if additional Keycloak-related configurations are required.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class KeycloakConfig {
 
   private final LeaveMasterSecurityProperties properties;
 
+  /**
+   * Configures the Keycloak client bean for interacting with the Keycloak Admin API.
+   *
+   * <p>Subclasses can override this method to customize the Keycloak client configuration.
+   *
+   * @return a configured {@link Keycloak} instance.
+   * @throws NullPointerException if the Keycloak properties are not set.
+   */
   @Bean
   public Keycloak keycloak() {
     var prop = Objects.requireNonNull(properties.getKeycloak());
@@ -36,6 +50,13 @@ public class KeycloakConfig {
         .build();
   }
 
+  /**
+   * Configures the TokenService bean for handling token-related operations in Keycloak.
+   *
+   * <p>Subclasses can override this method to customize the token service configuration.
+   *
+   * @return a {@link TokenService} instance for token operations.
+   */
   @Bean
   public TokenService tokenService() {
     return Keycloak.getClientProvider()

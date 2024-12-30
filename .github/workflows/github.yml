@@ -9,16 +9,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: testdb
-          MYSQL_USER: testuser
-          MYSQL_PASSWORD: testpassword
+#    services:
+#      mysql:
+#        image: mysql:8.0
+#        ports:
+#          - 3306:3306
+#        env:
+#          MYSQL_ROOT_PASSWORD: rootpassword
+#          MYSQL_DATABASE: testdb
+#          MYSQL_USER: testuser
+#          MYSQL_PASSWORD: testpassword
 
     steps:
       # Step 1: Check out the code
@@ -37,7 +37,6 @@ jobs:
         run: |
           echo "spring.datasource.url=${{ DB_CONFIG.DB_URL }}" >> src/main/resources/application.yml
           echo "spring.datasource.username=${{ DB_CONFIG.DB_USER }}" >> src/main/resources/application.yml
-          echo "spring.datasource.password=${{ DB_CONFIG.DB_PASSWORD }}" >> src/main/resources/application.yml
           echo "spring.datasource.password=${{ DB_CONFIG.DB_PASSWORD }}" >> src/main/resources/application.yml
 
       # Step 4: Cache Gradle dependencies

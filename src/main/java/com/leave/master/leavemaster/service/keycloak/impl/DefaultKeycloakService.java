@@ -24,14 +24,33 @@ import com.leave.master.leavemaster.utils.Logging;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Default implementation of the {@link KeycloakService} interface.
+ *
+ * <p>Provides methods for creating users, retrieving roles, and interacting with Keycloak's Admin
+ * API.
+ */
 @Service
 @Slf4j
 public class DefaultKeycloakService extends AbstractKeycloakService implements KeycloakService {
+
+  /**
+   * Constructs a new {@code DefaultKeycloakService} instance.
+   *
+   * @param keycloak the {@link Keycloak} client for accessing Keycloak Admin API.
+   * @param properties the security properties for the LeaveMaster application.
+   */
   public DefaultKeycloakService(
       final Keycloak keycloak, final LeaveMasterSecurityProperties properties) {
     super(keycloak, properties);
   }
 
+  /**
+   * Creates a new user in Keycloak.
+   *
+   * @param parameter the {@link KeycloakUserRequestDto} containing user details.
+   * @return the created {@link KeycloakUserResponseDto}.
+   */
   @Override
   public synchronized KeycloakUserResponseDto create(final KeycloakUserRequestDto parameter) {
     log.info("start to create user in keycloak");
@@ -39,6 +58,12 @@ public class DefaultKeycloakService extends AbstractKeycloakService implements K
         .map(RealmResource::users)
         .andThen(
             usersResource -> {
+              if (userRepository(usersResource).isUserExistByUsername(parameter.getEmail())) {
+                throw new ServiceException(
+                    ServiceErrorCode.BAD_REQUEST,
+                    () -> "User with username '%s' already exists".formatted(parameter.getEmail()));
+              }
+
               if (existUserWithEmail(usersResource, parameter.getEmail())) {
                 throw new ServiceException(
                     ServiceErrorCode.BAD_REQUEST,
@@ -76,14 +101,25 @@ public class DefaultKeycloakService extends AbstractKeycloakService implements K
         .get();
   }
 
+  /**
+   * Retrieves all users from the Keycloak realm.
+   *
+   * @return a list of {@link UserRepresentation}.
+   */
   @Override
   public List<UserRepresentation> getAllUser() {
-    return keycloak.realm(realm()).users().list();
+    return getKeycloak().realm(realm()).users().list();
   }
 
+  /**
+   * Retrieves roles assigned to a user by their username.
+   *
+   * @param username the username of the user.
+   * @return a set of role names.
+   */
   @Override
   public Set<String> getRolesByUserName(String username) {
-    RealmResource realmResource = keycloak.realm(properties.getKeycloak().getRealm());
+    RealmResource realmResource = getKeycloak().realm(getProperties().getKeycloak().getRealm());
     UsersResource users = realmResource.users();
     UserRepresentation userRepresentation =
         users.search(username).stream()
@@ -102,6 +138,12 @@ public class DefaultKeycloakService extends AbstractKeycloakService implements K
     return roles;
   }
 
+  /**
+   * Creates a {@link CredentialRepresentation} for a user's password.
+   *
+   * @param password the password to assign.
+   * @return a {@link CredentialRepresentation}.
+   */
   protected CredentialRepresentation passwordCredential(final String password) {
     log.info("start to assigned password for user");
     CredentialRepresentation credential = new CredentialRepresentation();
@@ -112,6 +154,12 @@ public class DefaultKeycloakService extends AbstractKeycloakService implements K
     return credential;
   }
 
+  /**
+   * Builds a {@link UserRepresentation} for creating a new user.
+   *
+   * @param parameter the user details.
+   * @return a {@link UserRepresentation}.
+   */
   protected UserRepresentation userRepresentationBuilder(final KeycloakUserRequestDto parameter) {
     return UserRepresentationBuilder.builder()
         .enabled(true)
@@ -128,7 +176,7 @@ public class DefaultKeycloakService extends AbstractKeycloakService implements K
   private void assignedRole(
       final KeycloakUserResponseDto userResponseDto, final KeycloakUserRequestDto parameter) {
     var clientRepId = clients().getFirst().getId();
-    keycloak
+    getKeycloak()
         .realm(realm())
         .users()
         .get(userResponseDto.getExternalId())
@@ -137,10 +185,23 @@ public class DefaultKeycloakService extends AbstractKeycloakService implements K
         .add(
             Collections.singletonList(
                 creatRoleRepresentation(clientRepId, parameter.getRole().getRoleName())));
+    assignRealmRole(userResponseDto.getExternalId(), parameter.getRole().getRoleName());
+  }
+
+  private void assignRealmRole(String userId, String realmRoleName) {
+    getKeycloak()
+        .realm(realm())
+        .users()
+        .get(userId)
+        .roles()
+        .realmLevel()
+        .add(
+            Collections.singletonList(
+                getKeycloak().realm(realm()).roles().get(realmRoleName).toRepresentation()));
   }
 
   private RoleRepresentation retrivRoles(final KeycloakUserResponseDto userResponseDto) {
-    return keycloak
+    return getKeycloak()
         .realm(realm())
         .users()
         .get(userResponseDto.getExternalId())
@@ -150,9 +211,16 @@ public class DefaultKeycloakService extends AbstractKeycloakService implements K
         .getFirst();
   }
 
+  /**
+   * Creates a {@link RoleRepresentation} for a client role in Keycloak.
+   *
+   * @param clientRepId the client representation ID.
+   * @param roleName the role name.
+   * @return a {@link RoleRepresentation}.
+   */
   protected RoleRepresentation creatRoleRepresentation(
       final String clientRepId, final String roleName) {
-    return keycloak
+    return getKeycloak()
         .realm(realm())
         .clients()
         .get(clientRepId)

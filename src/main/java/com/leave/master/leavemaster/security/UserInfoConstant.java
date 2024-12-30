@@ -14,6 +14,7 @@ public enum UserInfoConstant {
   GIVEN_NAME("given_name"),
   FAMILY_NAME("family_name"),
   EMAIL("email"),
+  REALM_ACCESS("realm_access"),
   RESOURCE_ACCESS("resource_access");
 
   private final String name;

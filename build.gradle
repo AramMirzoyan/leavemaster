@@ -81,9 +81,6 @@ dependencies {
 
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
 
 tasks.withType(Checkstyle) {
     reports {
@@ -103,7 +100,7 @@ tasks.register('validate', Checkstyle) {
     exclude '**/generated/**'
     doLast {
         if (checkstyleReports.get().any { it.file.exists() }) {
-//            throw new GradleException('Checkstyle found violations. See the report for details.')
+            throw new GradleException('Checkstyle found violations. See the report for details.')
         }
     }
 }
@@ -111,4 +108,6 @@ tasks.register('validate', Checkstyle) {
 tasks.named('build') {
     dependsOn('spotlessApply', 'spotlessCheck', 'bootJar')
 }
-
+tasks.named('test') {
+    useJUnitPlatform()
+}

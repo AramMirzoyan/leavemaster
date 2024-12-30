@@ -34,6 +34,7 @@ public class DefaultUserEntityService implements UserEntityService {
   private final ConverterResolver converterResolver;
   private final DefaultKeycloakService keycloakService;
   private final UserRoleRepository userRoleRepository;
+  private static final int ERROR_CODE = 400;
 
   /**
    * Creates a new user based on the provided {@link UserRequestDto}. Converts the request DTO to an
@@ -88,6 +89,12 @@ public class DefaultUserEntityService implements UserEntityService {
         .getOrElseThrow(th -> new ServiceException(ServiceErrorCode.UNEXPECTED_ERROR));
   }
 
+  /**
+   * Finds a user by their email.
+   *
+   * @param email the email address of the user to find.
+   * @return a {@link Try} containing the {@link UserResponseDto} or an error.
+   */
   @Override
   public Try<UserResponseDto> findUserByEmail(final String email) {
 
@@ -100,17 +107,30 @@ public class DefaultUserEntityService implements UserEntityService {
     return null;
   }
 
+  /**
+   * Retrieves a user by their ID.
+   *
+   * @param id the ID of the user to retrieve.
+   * @return a {@link Try} containing the {@link UserResponseDto} or an error.
+   */
   @Override
   public Try<UserResponseDto> get(String id) {
     return null;
   }
 
+  /**
+   * Handles recovery from unexpected errors.
+   *
+   * @param th the throwable causing the error.
+   * @param <T> the type of the value being recovered.
+   * @return a {@link Try} containing the error wrapped in a {@link ServiceException}.
+   */
   private <T> Try<T> recoverFromUnexpectedError(Throwable th) {
     if (th instanceof DataIntegrityViolationException) {
       return Try.failure(new ServiceException(ServiceErrorCode.DUPLICATE_ENTRY, th::getMessage));
     }
     if (th instanceof ServiceException ex) {
-      if (ex.getErrorCode() == 400) {
+      if (ex.getErrorCode() == ERROR_CODE) {
         return Try.failure(new ServiceException(ServiceErrorCode.BAD_REQUEST, th::getMessage));
       }
     }

@@ -3,11 +3,22 @@ name: Build and Test
 on:
   pull_request:
     branches:
-      - master  # Trigger on pull requests targeting the master branch
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: testpassword
 
     steps:
       # Step 1: Check out the code
@@ -21,7 +32,15 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # Step 3: Cache Gradle dependencies
+      # Step 3: Create application.properties dynamically
+      - name: Set up application properties
+        run: |
+          echo "spring.datasource.url=${{ DB_CONFIG.DB_URL }}" >> src/main/resources/application.yml
+          echo "spring.datasource.username=${{ DB_CONFIG.DB_USER }}" >> src/main/resources/application.yml
+          echo "spring.datasource.password=${{ DB_CONFIG.DB_PASSWORD }}" >> src/main/resources/application.yml
+          echo "spring.datasource.password=${{ DB_CONFIG.DB_PASSWORD }}" >> src/main/resources/application.yml
+
+      # Step 4: Cache Gradle dependencies
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -30,10 +49,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # Step 4: Clean and Build the Project
+      # Step 5: Clean and Build the Project
       - name: Clean and Build with Gradle
         run: ./gradlew clean build
 
-      # Step 5: Run Tests
+
+        # Step 5: Run Tests
       - name: Run Tests
         run: ./gradlew clean test
+

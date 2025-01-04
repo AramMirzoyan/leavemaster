@@ -10,6 +10,10 @@ import com.leave.master.leavemaster.dto.auth.LoginRequestDto;
 import com.leave.master.leavemaster.dto.auth.TokenResponseDto;
 import com.leave.master.leavemaster.security.AuthService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/auth")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "${auth.tag.name}", description = "${auth.tag.dsc}")
 public class Authentication {
   private final AuthService authService;
 
@@ -36,6 +41,16 @@ public class Authentication {
    *     token.
    */
   @PostMapping("/login")
+  @Operation(
+      summary = "${auth.login.summary}",
+      description = "${auth.login.dsc}",
+      requestBody =
+          @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              content = @Content(schema = @Schema(implementation = LoginRequestDto.class)),
+              description = "This is a request body",
+              useParameterTypeSchema = true,
+              required = true),
+      method = "POST")
   public GenResponse<TokenResponseDto> login(
       @RequestBody @Valid final LoginRequestDto source, final HttpServletRequest request) {
     return GenResponse.success(

@@ -27,7 +27,7 @@ public class ExternalHolidayUpdate {
    * Initializes the holiday data update process. This method retrieves holiday data for the current
    * year and updates the database.
    */
-  //    @PostConstruct
+  //      @PostConstruct
   public void initHolidayUpdate() {
     var currentYear = getCurrentYear();
     log.info("Current year: {}", currentYear);

@@ -67,5 +67,16 @@ logging:
     org:
       springframework:
         security: DEBUG
-#        web:
-#          FilterChainProxy: TRACE
+        web: DEBUG
+    org.springdoc: DEBUG
+
+
+
+
+
+springdoc:
+  swagger-ui:
+    path: /index.html
+  api-docs:
+    path: /v3/api-docs
+

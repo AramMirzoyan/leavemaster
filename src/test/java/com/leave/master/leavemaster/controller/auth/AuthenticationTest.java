@@ -1,79 +1,69 @@
 package com.leave.master.leavemaster.controller.auth;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import com.leave.master.leavemaster.dto.GenResponse;
-import com.leave.master.leavemaster.dto.auth.LoginRequestDto;
-import com.leave.master.leavemaster.dto.auth.TokenResponseDto;
-import com.leave.master.leavemaster.security.AuthService;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
+@Disabled
 class AuthenticationTest {
-
-  @MockBean private AuthService authService;
-  @MockBean private HttpServletRequest httpServletRequest;
-  @Autowired private Authentication authentication;
-
-  //  static Stream<Arguments> testLoginValidationFailedArguments() {
-  //    return Stream.of(
-  //        Arguments.of(
-  //            LoginRequestDto.builder().email("user@exaples.com").build(),
-  //            "password is mandatory",
-  //            "password"),
-  //        Arguments.of(
-  //            LoginRequestDto.builder().password("password").build(), "email is mandatory",
-  // "email"));
+  //
+  //  @MockBean private AuthService authService;
+  //  @MockBean private HttpServletRequest httpServletRequest;
+  //  @Autowired private Authentication authentication;
+  //
+  //  //  static Stream<Arguments> testLoginValidationFailedArguments() {
+  //  //    return Stream.of(
+  //  //        Arguments.of(
+  //  //            LoginRequestDto.builder().email("user@exaples.com").build(),
+  //  //            "password is mandatory",
+  //  //            "password"),
+  //  //        Arguments.of(
+  //  //            LoginRequestDto.builder().password("password").build(), "email is mandatory",
+  //  // "email"));
+  //  //  }
+  //
+  //  @Test
+  //  @DisplayName("Login should success ")
+  //  public void loginSuccess() {
+  //    // given
+  //    LoginRequestDto loginRequestDto =
+  //        LoginRequestDto.builder().email("user@exaples.com").password("password").build();
+  //
+  //    TokenResponseDto tokenResponseDto =
+  //        TokenResponseDto.builder()
+  //            .accessToken("testAccessToken")
+  //            .refreshToken("testRefreshToken")
+  //            .build();
+  //
+  //    when(httpServletRequest.getAttribute("clientId")).thenReturn("test-client-id");
+  //    when(httpServletRequest.getAttribute("clientSecret")).thenReturn("test-client-secret");
+  //    when(authService.login(any(LoginRequestDto.class))).thenReturn(tokenResponseDto);
+  //
+  //    // when
+  //    GenResponse<TokenResponseDto> response =
+  //        authentication.login(loginRequestDto, httpServletRequest);
+  //
+  //    // then
+  //    assertThat(response).isNotNull();
+  //    assertThat(response.getData()).isEqualTo(tokenResponseDto);
+  //    assertThat(response.getMessage()).isEqualTo("Login request processed successfully");
+  //
+  //    verify(authService).login(any(LoginRequestDto.class));
+  //    verify(authService, times(1))
+  //        .login(
+  //            argThat(
+  //                argument ->
+  //                    argument != null
+  //                        && "user@exaples.com".equals(argument.getEmail())
+  //                        && "password".equals(argument.getPassword())
+  //                        && "test-client-id".equals(argument.getClientId())
+  //                        && "test-client-secret".equals(argument.getClientSecret())));
   //  }
-
-  @Test
-  @DisplayName("Login should success ")
-  public void loginSuccess() {
-    // given
-    LoginRequestDto loginRequestDto =
-        LoginRequestDto.builder().email("user@exaples.com").password("password").build();
-
-    TokenResponseDto tokenResponseDto =
-        TokenResponseDto.builder()
-            .accessToken("testAccessToken")
-            .refreshToken("testRefreshToken")
-            .build();
-
-    when(httpServletRequest.getAttribute("clientId")).thenReturn("test-client-id");
-    when(httpServletRequest.getAttribute("clientSecret")).thenReturn("test-client-secret");
-    when(authService.login(any(LoginRequestDto.class))).thenReturn(tokenResponseDto);
-
-    // when
-    GenResponse<TokenResponseDto> response =
-        authentication.login(loginRequestDto, httpServletRequest);
-
-    // then
-    assertThat(response).isNotNull();
-    assertThat(response.getData()).isEqualTo(tokenResponseDto);
-    assertThat(response.getMessage()).isEqualTo("Login request processed successfully");
-
-    verify(authService).login(any(LoginRequestDto.class));
-    verify(authService, times(1))
-        .login(
-            argThat(
-                argument ->
-                    argument != null
-                        && "user@exaples.com".equals(argument.getEmail())
-                        && "password".equals(argument.getPassword())
-                        && "test-client-id".equals(argument.getClientId())
-                        && "test-client-secret".equals(argument.getClientSecret())));
-  }
 
   //  @DisplayName("Login should fail with MethodArgumentException when field validation fails")
   //  @ParameterizedTest

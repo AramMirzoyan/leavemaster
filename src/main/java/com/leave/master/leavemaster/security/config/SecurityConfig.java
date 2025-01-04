@@ -35,13 +35,24 @@ import lombok.extern.slf4j.Slf4j;
 @EnableMethodSecurity(securedEnabled = true)
 @Slf4j
 public class SecurityConfig {
-  private static final String[] WHITE_LIST_URLS = {"/auth/login"};
+  private static final String[] WHITE_LIST_URLS = {
+    "/auth/login",
+    "/v3/api-docs/**",
+    "/swagger-ui/**",
+    "/swagger-ui/index.html",
+    "/swagger-ui.html",
+    "/webjars/**",
+    "/swagger-resources/**",
+    "/swagger-resources",
+    "/swagger-resources/**",
+    "/actuator/**",
+  };
+
+  private static final long CORS_MAX_AGE = 3600L; // Max age for CORS preflight requests
   private final JwtAuthConverter jwtAuthConverter;
 
   @Value("${web.cors.origins}")
   private String allowedOrigins;
-
-  private static final long CORS_MAX_AGE = 3600L; // Max age for CORS preflight requests
 
   @Value("${server.servlet.context-path}")
   private String ctxPath;

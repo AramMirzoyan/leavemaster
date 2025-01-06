@@ -39,8 +39,12 @@ external:
   zone: ${ZONE:Asia/Yerevan}
 
 
-unpaidLeave:
-  yearMaxDay: ${MAX_DAY_UNPAID_LEAVE:7}
+leave:
+  unpaid:
+   yearMaxDay: ${MAX_DAY_UNPAID_LEAVE:6}
+  paied:
+    yearMaxDay: ${MAX_DAY_PAID_LEAVE:20}
+
 
 web:
   cors:
@@ -69,10 +73,6 @@ logging:
         security: DEBUG
         web: DEBUG
     org.springdoc: DEBUG
-
-
-
-
 
 springdoc:
   swagger-ui:

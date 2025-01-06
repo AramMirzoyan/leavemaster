@@ -114,8 +114,11 @@ public class DefaultUserEntityService implements UserEntityService {
    * @return a {@link Try} containing the {@link UserResponseDto} or an error.
    */
   @Override
-  public Try<UserResponseDto> get(String id) {
-    return null;
+  public Try<UserResponseDto> findById(final String id) {
+    return  Try.of(() -> userEntityRepository.findById(id)
+            .orElseThrow(() -> new ServiceException(ServiceErrorCode.CAN_NOT_FOUND_DATA)))
+            .flatMap(userEntity ->
+                    converterResolver.convert(UserEntity.class,UserResponseDto.class,userEntity));
   }
 
   /**

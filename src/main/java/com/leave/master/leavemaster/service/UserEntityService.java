@@ -35,5 +35,5 @@ public interface UserEntityService {
    * @return a {@link Try} containing the {@link UserResponseDto} or an error if the user is not
    *     found.
    */
-  Try<UserResponseDto> get(String id);
+  Try<UserResponseDto> findById(String id);
 }

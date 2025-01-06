@@ -1,3 +1,13 @@
 package com.leave.master.leavemaster.service;
 
-public interface LeaveEntityService {}
+import com.leave.master.leavemaster.dto.leave.LeaveRequestDto;
+
+public interface LeaveEntityService {
+
+
+    boolean create(final LeaveRequestDto requestDto);
+
+
+
+
+}

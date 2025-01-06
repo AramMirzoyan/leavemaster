@@ -1,5 +1,6 @@
 package com.leave.master.leavemaster.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,4 +24,5 @@ public interface UserEntityRepository extends JpaRepository<UserEntity, UUID> {
    * @return {@code true} if a user with the specified email exists, {@code false} otherwise.
    */
   boolean existsByEmail(String email);
+  Optional<UserEntity> findById(String id);
 }

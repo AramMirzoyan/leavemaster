@@ -1,0 +1,14 @@
+{
+  "id": "35753478-1934-4e8e-a52f-b34f9d492trd",
+  "realm": "leavemaster-realm",
+  "sslRequired": "none",
+  "clients": [
+    {
+      "clientId": "leavemaster_client",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "redirectUris": ["http://localhost:8080/*"]
+    }
+  ]
+}

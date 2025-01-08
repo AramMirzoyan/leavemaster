@@ -2,14 +2,13 @@ package com.leave.master.leavemaster.controller;
 
 import java.util.List;
 
-import com.leave.master.leavemaster.dto.leave.LeaveRequestDto;
-import com.leave.master.leavemaster.service.LeaveEntityService;
-import com.leave.master.leavemaster.service.LeaveTypeService;
 import org.springframework.web.bind.annotation.*;
 
 import com.leave.master.leavemaster.dto.GenResponse;
+import com.leave.master.leavemaster.dto.leave.LeaveRequestDto;
 import com.leave.master.leavemaster.model.LeaveTypeEntity;
-import com.leave.master.leavemaster.service.impl.DefaultLeaveTypeService;
+import com.leave.master.leavemaster.service.LeaveEntityService;
+import com.leave.master.leavemaster.service.LeaveTypeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,17 +22,10 @@ public class LeaveController {
   private final LeaveTypeService leaveTypeService;
   private final LeaveEntityService leaveEntityService;
 
-
-
   @PostMapping("/create")
-  public GenResponse<Boolean> createLeave(@RequestBody final LeaveRequestDto requestDto){
-   return  GenResponse.success(leaveEntityService.create(requestDto));
+  public GenResponse<Boolean> createLeave(@RequestBody final LeaveRequestDto requestDto) {
+    return GenResponse.success(leaveEntityService.create(requestDto));
   }
-
-
-
-
-
 
   /**
    * fetch all type of leave type entity.

@@ -4,10 +4,5 @@ import com.leave.master.leavemaster.dto.leave.LeaveRequestDto;
 
 public interface LeaveEntityService {
 
-
-    boolean create(final LeaveRequestDto requestDto);
-
-
-
-
+  boolean create(final LeaveRequestDto requestDto);
 }

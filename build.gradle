@@ -87,6 +87,16 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation 'org.testcontainers:testcontainers:1.20.4'
+    testImplementation 'org.testcontainers:junit-jupiter:1.20.4'
+    testImplementation 'org.testcontainers:mysql:1.20.4'
+    testImplementation 'com.github.dasniko:testcontainers-keycloak:3.2.0'
+    testImplementation 'org.apache.commons:commons-lang3:3.14.0'
+
+
+
+
 }
 
 

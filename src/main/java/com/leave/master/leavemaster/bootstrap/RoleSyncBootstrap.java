@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
  * integrity of the initialization process.
  */
 @Component
-@Lazy(value = false)
+@Lazy
 @RequiredArgsConstructor
 @Slf4j
 public class RoleSyncBootstrap {

@@ -115,10 +115,14 @@ public class DefaultUserEntityService implements UserEntityService {
    */
   @Override
   public Try<UserResponseDto> findById(final String id) {
-    return  Try.of(() -> userEntityRepository.findById(id)
-            .orElseThrow(() -> new ServiceException(ServiceErrorCode.CAN_NOT_FOUND_DATA)))
-            .flatMap(userEntity ->
-                    converterResolver.convert(UserEntity.class,UserResponseDto.class,userEntity));
+    return Try.of(
+            () ->
+                userEntityRepository
+                    .findById(id)
+                    .orElseThrow(() -> new ServiceException(ServiceErrorCode.CAN_NOT_FOUND_DATA)))
+        .flatMap(
+            userEntity ->
+                converterResolver.convert(UserEntity.class, UserResponseDto.class, userEntity));
   }
 
   /**

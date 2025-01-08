@@ -12,6 +12,7 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
+@ConditionalOnProperty(name = "keycloak.db.sync", havingValue = "true", matchIfMissing = true)
 public class DefaultRoleService extends AbstractKeycloakService implements RoleService {
 
   /**

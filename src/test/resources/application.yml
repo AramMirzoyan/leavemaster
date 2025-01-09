@@ -2,11 +2,11 @@ spring:
   liquibase:
     enabled: false
 #
-#  datasource:
-#    url: jdbc:tc:mysql:8.4.2://mysql:3306/leavemaster
-#    username: root
-#    password: root
-#    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  datasource:
+    url: jdbc:tc:mysql:8.4.2://mysql:3306/leavemaster
+    username: root
+    password: root
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
 
 keycloak:
   db:

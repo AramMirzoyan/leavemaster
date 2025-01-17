@@ -80,3 +80,41 @@ springdoc:
   api-docs:
     path: /v3/api-docs
 
+keycloak:
+  db:
+    sync: true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude:
+  endpoint:
+    info:
+      enabled: true
+  info:
+    app:
+      name
+    git:
+      mode: full
+#    java:
+#      enabled: true
+#    os:
+#      enabled: true
+#    git:
+#      enabled: true
+#    build:
+#      enabled: true
+#    process:
+#      enabled: true
+
+
+info:
+  app:
+    name:
+
+
+
+

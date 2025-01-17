@@ -24,5 +24,12 @@ public interface UserEntityRepository extends JpaRepository<UserEntity, UUID> {
    * @return {@code true} if a user with the specified email exists, {@code false} otherwise.
    */
   boolean existsByEmail(String email);
+
+  /**
+   * Find by id.
+   *
+   * @param id user id to retriv data.
+   * @return Optional user entity data
+   */
   Optional<UserEntity> findById(String id);
 }

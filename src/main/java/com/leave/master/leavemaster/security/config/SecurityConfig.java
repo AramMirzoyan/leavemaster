@@ -46,6 +46,7 @@ public class SecurityConfig {
     "/swagger-resources",
     "/swagger-resources/**",
     "/actuator/**",
+    "/actuator/info",
   };
 
   private static final long CORS_MAX_AGE = 3600L; // Max age for CORS preflight requests

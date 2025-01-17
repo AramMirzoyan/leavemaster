@@ -9,7 +9,7 @@ public enum Constant {
 
     PASSWORD("password"),
     CLIENT_ID("leavemaster_client"),
-    CLIENT_SECRET("client_secret");
+    CLIENT_SECRET("lCPJgheEZLuIJJZUyXjSnSr0HNmmSPkC");
 
 
 

@@ -60,5 +60,6 @@ class LeavemasterApplicationTests {
 
         JacksonJsonParser jsonParser = new JacksonJsonParser();
         String token = "Bearer " + jsonParser.parseMap(result).get("access_token").toString();
+        System.out.println(token);
     }
 }

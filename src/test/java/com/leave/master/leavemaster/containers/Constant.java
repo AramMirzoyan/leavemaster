@@ -6,13 +6,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Constant {
+  PASSWORD("password"),
+  CLIENT_ID("leavemaster_client"),
+  CLIENT_SECRET("lCPJgheEZLuIJJZUyXjSnSr0HNmmSPkC");
 
-    PASSWORD("password"),
-    CLIENT_ID("leavemaster_client"),
-    CLIENT_SECRET("lCPJgheEZLuIJJZUyXjSnSr0HNmmSPkC");
-
-
-
-    private final String value;
-
+  private final String value;
 }

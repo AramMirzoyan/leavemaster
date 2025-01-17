@@ -13,6 +13,22 @@ import com.leave.master.leavemaster.service.LeaveTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Controller for managing leave-related operations in the LeaveMaster application.
+ *
+ * <p>This class provides endpoints for creating leave requests and fetching leave types based on
+ * various criteria such as name or ID. It interacts with the {@link LeaveTypeService} and {@link
+ * LeaveEntityService} to perform the necessary operations.
+ *
+ * <p>Endpoints:
+ *
+ * <ul>
+ *   <li><code>POST /leave/create</code> - Creates a new leave request.
+ *   <li><code>GET /leave/type</code> - Fetches all leave types.
+ *   <li><code>GET /leave/type/name/{name}</code> - Fetches a leave type by name.
+ *   <li><code>GET /leave/type/id/{id}</code> - Fetches a leave type by ID.
+ * </ul>
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/leave")
@@ -22,6 +38,12 @@ public class LeaveController {
   private final LeaveTypeService leaveTypeService;
   private final LeaveEntityService leaveEntityService;
 
+  /**
+   * Creates a new leave request.
+   *
+   * @param requestDto the request data for creating a leave
+   * @return a success response with a boolean indicating the operation's result
+   */
   @PostMapping("/create")
   public GenResponse<Boolean> createLeave(@RequestBody final LeaveRequestDto requestDto) {
     return GenResponse.success(leaveEntityService.create(requestDto));

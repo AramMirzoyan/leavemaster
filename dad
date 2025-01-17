@@ -1,0 +1,71 @@
+[33mcommit 33b87cfdfc69572ae7cc7195ac402ab8d13dc090[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32muat[m[33m)[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Sun Dec 29 23:19:48 2024 +0400
+
+    updated
+
+[33mcommit e28559bdec80d46989201741696f9dd3d773993c[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Sun Dec 29 23:09:32 2024 +0400
+
+    add documentation  for all public class and methods
+
+[33mcommit 9660303d8669952ec1af044e0362fea5b6337fd5[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Fri Dec 27 22:02:03 2024 +0400
+
+    add documentation
+
+[33mcommit f75b932cc840d3f28a1fdfa127615247e7180597[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Fri Dec 27 20:32:53 2024 +0400
+
+    add documentation
+
+[33mcommit 1a4047730ce008760f37370a9bc8e2eddb3aef87[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Tue Dec 24 19:08:14 2024 +0400
+
+    fix bug for authentication and fix bug for empty request fileds for login,
+
+[33mcommit 43bb47a900ab74f60fdc71c4d505c0c343b21fc0[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Sat Dec 21 01:49:27 2024 +0400
+
+    update git file add function clean build
+
+[33mcommit de98ec6030c2b014fb639755d224c70305332698[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Sat Dec 21 01:44:31 2024 +0400
+
+    update git file
+
+[33mcommit cbb5d0897e859b6026b9490c0a901e382de1d26a[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Sat Dec 21 01:41:40 2024 +0400
+
+    optimize code
+
+[33mcommit 11fc16ba4e4010c366f57538273cf27674e8f338[m[33m ([m[1;32mmaster[m[33m)[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Sat Dec 21 01:29:32 2024 +0400
+
+    add git file
+
+[33mcommit f2c09cfbb96256a0e2fe33a877615980edc50e0d[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Fri Dec 20 23:52:59 2024 +0400
+
+    add files
+
+[33mcommit 5d39a6571909c87cc82afd776bb0e3499e616661[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Fri Dec 20 23:52:35 2024 +0400
+
+    add files
+
+[33mcommit 55187c0eb5f2a74714bfa91e75df89efd6a13481[m
+Author: Aram Mirzoyan <aram.mirzoyan@cognaize.com>
+Date:   Fri Dec 20 23:51:12 2024 +0400
+
+    init commot

@@ -1,0 +1,370 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="add table user-entity" author="Aram Mirzoyan">
+        <preConditions onFail="HALT">
+            <not>
+                <tableExists tableName="user_entity"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="user_entity">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="surname" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_role_id" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_leave" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deactivated_at" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="job_title" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table leave" author="Aram Mirzoyan">
+        <preConditions>
+            <not>
+                <tableExists tableName="leave"/>
+            </not>
+        </preConditions>
+        <createTable tableName="leave">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="start_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="used_days" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="requested_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_entity_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_type_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="create table leave type" author="Aram Mirzoyan">
+        <preConditions>
+            <not>
+                <tableExists tableName="leave_type"/>
+            </not>
+        </preConditions>
+        <createTable tableName="leave_type">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table user role" author="Aram Mirzoyan">
+        <preConditions>
+            <not>
+                <tableExists tableName="user_role"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_role">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="create table leave_balanced" author="Aram Mirzoyan">
+        <preConditions>
+            <not>
+                <tableExists tableName="leave_balanced"/>
+            </not>
+        </preConditions>
+        <createTable tableName="leave_balanced">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="year" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="used_days" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remaining_days" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_entity_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_type_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table logs" author="Aram Mirzoyan">
+        <preConditions>
+            <not>
+                <tableExists tableName="log"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="log">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="leave_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_type_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_entity_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table holidays" author="Aram Mirzoyan">
+        <preConditions>
+            <not>
+                <tableExists tableName="holiday"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="holiday">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+            <column name="local_name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="country_code" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table bulletin" author="Aram Mirzoyan">
+        <preConditions>
+            <not>
+                <tableExists tableName="bulletin"/>
+            </not>
+        </preConditions>
+        <createTable tableName="bulletin">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="url" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_entity_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_type_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_entity_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create table approval" author="Aram Mirzoyan">
+        <preConditions>
+            <not>
+                <tableExists tableName="approval"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="approval">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="text">
+                <constraints nullable="true"/>
+            </column>
+            <column name="user_entity_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leave_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add foreign key approval" author="Aram Mirzoyan">
+        <addForeignKeyConstraint baseTableName="approval"
+                                 baseColumnNames="user_entity_id"
+                                 constraintName="fk_approval_entity"
+                                 referencedTableName="user_entity"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="approval"
+                                 baseColumnNames="leave_id"
+                                 constraintName="fk_approval_leave"
+                                 referencedTableName="leave"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add foreign key  user_role_user" author="Aram Mirzoyan">
+        <addForeignKeyConstraint baseTableName="user_entity"
+                                 baseColumnNames="user_role_id"
+                                 constraintName="fk_user_user_role"
+                                 referencedTableName="user_role"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add foreign key log-user-entity log-leave-leave-type" author="Aram Mirzoyan">
+        <addForeignKeyConstraint baseTableName="log"
+                                 baseColumnNames="user_entity_id"
+                                 constraintName="fk_log_user_entity"
+                                 referencedTableName="user_entity"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="log"
+                                 baseColumnNames="leave_type_id"
+                                 constraintName="fk_log_leave_type"
+                                 referencedTableName="leave_type"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="log"
+                                 baseColumnNames="leave_id"
+                                 constraintName="fk_log_leave"
+                                 referencedTableName="leave"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add-foreign-keys-leave-entity-user-entity" author="Aram Mirzoyan">
+        <addForeignKeyConstraint baseTableName="leave"
+                                 baseColumnNames="user_entity_id"
+                                 constraintName="fk_leave_user"
+                                 referencedTableName="user_entity"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="leave"
+                                 baseColumnNames="leave_type_id"
+                                 constraintName="fk_leave_leave_type"
+                                 referencedTableName="leave_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add foreign keys leave-balanced-user-entity-leave-type-entity" author="Aram Mirzoyan">
+        <addForeignKeyConstraint baseTableName="leave_balanced"
+                                 baseColumnNames="user_entity_id"
+                                 constraintName="fk_leave_balanced_user_entity"
+                                 referencedTableName="user_entity"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="leave_balanced"
+                                 baseColumnNames="leave_type_id"
+                                 constraintName="fk_leave_balanced_leave_type"
+                                 referencedTableName="leave_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add foreign key bulletin-entity-leave-leave-type" author="Aram Mirzoyan">
+        <addForeignKeyConstraint baseTableName="bulletin"
+                                 baseColumnNames="user_entity_id"
+                                 constraintName="fk_bulletin_user_entity"
+                                 referencedTableName="user_entity"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="bulletin"
+                                 baseColumnNames="leave_entity_id"
+                                 constraintName="fk_bulletin_leave_entity"
+                                 referencedTableName="leave"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="bulletin"
+                                 baseColumnNames="leave_type_id"
+                                 constraintName="fk_bulletin_leave_type_id"
+                                 referencedTableName="leave_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="insert-leave-types" author="Aram Mirzoyan">
+        <insert tableName="leave_type">
+            <column name="id" valueComputed="UUID()"/> <!-- Use database UUID function -->
+            <column name="name" value="Annual Leave"/>
+            <column name="description" value="Leave for annual vacation or personal time"/>
+        </insert>
+        <insert tableName="leave_type">
+            <column name="id" valueComputed="UUID()"/>
+            <column name="name" value="Sick Leave"/>
+            <column name="description" value="Leave for health-related issues"/>
+        </insert>
+        <insert tableName="leave_type">
+            <column name="id" valueComputed="UUID()"/>
+            <column name="name" value="Unpaid Leave"/>
+            <column name="description" value="Leave without pay"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert user role" author="Aram Mirzoyan">
+        <insert tableName="user_role">
+            <column name="id" valueComputed="UUID()"/>
+            <column name="name" value="Admin"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="id" valueComputed="UUID()"/>
+            <column name="name" value="User"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

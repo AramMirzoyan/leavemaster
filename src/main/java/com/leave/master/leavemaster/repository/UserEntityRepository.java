@@ -25,5 +25,11 @@ public interface UserEntityRepository extends JpaRepository<UserEntity, UUID> {
    */
   boolean existsByEmail(String email);
 
+  /**
+   * Find by id.
+   *
+   * @param id user id to retriv data.
+   * @return Optional user entity data
+   */
   Optional<UserEntity> findById(String id);
 }

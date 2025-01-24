@@ -19,29 +19,25 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.leave.master.leavemaster.LeavemasterApplicationTest;
 import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
 import com.leave.master.leavemaster.dto.GenResponse;
 import com.leave.master.leavemaster.dto.auth.LoginRequestDto;
 import com.leave.master.leavemaster.dto.auth.TokenResponseDto;
 import com.leave.master.leavemaster.interceptors.ClientAttributeInterceptor;
 import com.leave.master.leavemaster.security.AuthService;
-import com.leave.master.leavemaster.security.converter.JwtAuthConverter;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(Authentication.class)
+@Import(value = {LeavemasterApplicationTest.TestConfig.class})
 @EnableConfigurationProperties(value = {LeaveMasterSecurityProperties.class})
 class AuthenticationTest {
 
@@ -73,7 +69,7 @@ class AuthenticationTest {
 
   @Test
   @DisplayName("Login should success ")
-  public void loginSuccess() {
+  void loginSuccess() {
     // given
     LoginRequestDto loginRequestDto =
         LoginRequestDto.builder().email("user@exaples.com").password("password").build();
@@ -112,8 +108,8 @@ class AuthenticationTest {
   @DisplayName("Login should fail with MethodArgumentException when field validation fails")
   @ParameterizedTest
   @MethodSource("testLoginValidationFailedArguments")
-  public void testLoginValidationFailed(
-      LoginRequestDto requestDto, String message, String fieldName) throws Exception {
+  void testLoginValidationFailed(LoginRequestDto requestDto, String message, String fieldName)
+      throws Exception {
 
     mockMvc
         .perform(
@@ -130,6 +126,4 @@ class AuthenticationTest {
     // verify
     verify(authService, never()).login(any(LoginRequestDto.class));
   }
-
-
 }

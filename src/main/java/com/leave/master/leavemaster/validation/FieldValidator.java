@@ -48,7 +48,7 @@ public class FieldValidator {
                       new ErrorResponse(
                           ((FieldError) error).getField(), error.getDefaultMessage())));
 
-      throw new MethodArgumentException(ServiceErrorCode.BAD_REQUEST, errors);
+      throw new MethodArgumentException(ServiceErrorCode.PRECONDITION_FAILED, errors);
     }
   }
 }

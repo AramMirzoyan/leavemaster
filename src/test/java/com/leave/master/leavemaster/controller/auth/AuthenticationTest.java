@@ -131,25 +131,5 @@ class AuthenticationTest {
     verify(authService, never()).login(any(LoginRequestDto.class));
   }
 
-  @TestConfiguration
-  public static class TestConfig {
-    @Bean
-    public JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter() {
-      return new JwtGrantedAuthoritiesConverter();
-    }
 
-    @Bean
-    public JwtAuthConverter jwtAuthConverter(
-        JwtGrantedAuthoritiesConverter converter, LeaveMasterSecurityProperties properties) {
-      return new JwtAuthConverter(converter, properties);
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-      http.csrf(AbstractHttpConfigurer::disable)
-          .authorizeHttpRequests(
-              auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated());
-      return http.build();
-    }
-  }
 }

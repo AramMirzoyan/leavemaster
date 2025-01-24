@@ -15,7 +15,4 @@ import lombok.experimental.SuperBuilder;
 public class UserRequestDto extends AbstractUserDto {
   @NotBlank(message = "password is mandatory")
   private String password;
-
-  @NotBlank(message = "job title is mandatory")
-  private String jobTitle;
 }

@@ -30,8 +30,9 @@ public class AbstractUserDto {
   //      regexp = "^[A-Za-z0-9._%+-]+@cognaize\\.com$",
   //      message = "Email must be from the domain cognaize.com")
   private String email;
+
   @NotBlank(message = "job title is mandatory")
   private String jobTitle;
-  @NotNull(message = "role is mandatory")
-  private UserRoleEnum role;
+
+  @NotNull(message = "role is mandatory") private UserRoleEnum role;
 }

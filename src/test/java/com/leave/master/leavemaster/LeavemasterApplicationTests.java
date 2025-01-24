@@ -1,11 +1,8 @@
 package com.leave.master.leavemaster;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.leave.master.leavemaster.config.CustomSecurityLoggingFilter;
-import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
-import com.leave.master.leavemaster.config.TestJwtDecoder;
-import com.leave.master.leavemaster.containers.LeaveMasterAuthToken;
-import com.leave.master.leavemaster.interceptors.ClientAttributeInterceptor;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,9 +20,12 @@ import org.springframework.security.oauth2.server.resource.web.authentication.Be
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.leave.master.leavemaster.config.CustomSecurityLoggingFilter;
+import com.leave.master.leavemaster.config.LeaveMasterSecurityProperties;
+import com.leave.master.leavemaster.containers.LeaveMasterAuthToken;
+import com.leave.master.leavemaster.interceptors.ClientAttributeInterceptor;
+import com.leave.master.leavemaster.security.converter.JwtAuthConverter;
 
 @ExtendWith(MockitoExtension.class)
 @EnableConfigurationProperties(value = {LeaveMasterSecurityProperties.class})
@@ -33,41 +33,49 @@ import static org.mockito.Mockito.when;
 @Import({LeavemasterApplicationTests.TestConfig.class})
 public class LeavemasterApplicationTests {
 
-    @Autowired
-    protected MockMvc mockMvc;
-    @Autowired
-    protected ObjectMapper objectMapper;
-    @MockBean
-    protected ClientAttributeInterceptor clientAttributeInterceptor;
-    protected LeaveMasterAuthToken leaveMasterAuthToken;
+  @Autowired protected MockMvc mockMvc;
+  @Autowired protected ObjectMapper objectMapper;
+  @MockBean protected ClientAttributeInterceptor clientAttributeInterceptor;
+  protected LeaveMasterAuthToken leaveMasterAuthToken;
+  @MockBean private JwtAuthConverter jwtAuthConverter;
 
-    @BeforeEach
-    void setup() {
-        leaveMasterAuthToken = new LeaveMasterAuthToken();
-        try {
-            when(clientAttributeInterceptor.preHandle(any(), any(), any())).thenReturn(true);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+  @BeforeEach
+  void setup() {
+    leaveMasterAuthToken = new LeaveMasterAuthToken();
+    try {
+      when(clientAttributeInterceptor.preHandle(any(), any(), any())).thenReturn(true);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @TestConfiguration
+  public static class TestConfig {
+
+    @Bean
+    public LeaveMasterSecurityProperties properties() {
+      return new LeaveMasterSecurityProperties();
     }
 
-
-    @TestConfiguration
-    public static class TestConfig {
-
-        @Bean
-        public JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter() {
-            return new JwtGrantedAuthoritiesConverter();
-        }
-
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http.csrf(AbstractHttpConfigurer::disable)
-                    .authorizeHttpRequests(
-                            auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
-                    .addFilterBefore(new CustomSecurityLoggingFilter(), BearerTokenAuthenticationFilter.class)
-            ;
-            return http.build();
-        }
+    @Bean
+    public JwtAuthConverter jwtAuthConverter(
+        JwtGrantedAuthoritiesConverter converter, LeaveMasterSecurityProperties properties) {
+      return new JwtAuthConverter(converter, properties);
     }
+
+    @Bean
+    public JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter() {
+      return new JwtGrantedAuthoritiesConverter();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+      http.csrf(AbstractHttpConfigurer::disable)
+          .authorizeHttpRequests(
+              auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
+          .addFilterBefore(
+              new CustomSecurityLoggingFilter(), BearerTokenAuthenticationFilter.class);
+      return http.build();
+    }
+  }
 }

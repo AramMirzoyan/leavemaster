@@ -20,15 +20,26 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import dasniko.testcontainers.keycloak.KeycloakContainer;
 
-/** Provides methods for interacting with the Keycloak authorization server. */
+/**
+ * Provides methods for interacting with the Keycloak authorization server.
+ *
+ * <p>This class is responsible for managing the Keycloak container and retrieving authentication
+ * tokens for user credentials. It uses the Testcontainers library to manage the Keycloak container
+ * and Spring's WebClient for HTTP requests.
+ */
 @Testcontainers
 @DirtiesContext
 public final class LeaveMasterAuthToken {
 
+  /** The Keycloak container instance used for testing authentication. */
   @Container private static final KeycloakContainer KEYCLOAK = KeycloakTestContainer.getInstance();
 
   private final WebClient webClient;
 
+  /**
+   * Constructs a new instance of {@code LeaveMasterAuthToken}. Starts the Keycloak container if it
+   * is not already running.
+   */
   public LeaveMasterAuthToken() {
     this.webClient = WebClient.builder().build();
     if (!KEYCLOAK.isRunning()) {
@@ -36,6 +47,7 @@ public final class LeaveMasterAuthToken {
     }
   }
 
+  /** A function that generates the authorization URI for the Keycloak server. */
   private final Function<KeycloakContainer, URIBuilder> authorizationURI =
       keycloakContainer -> {
         try {
@@ -74,6 +86,13 @@ public final class LeaveMasterAuthToken {
     return new JacksonJsonParser().parseMap(result).get("access_token").toString();
   }
 
+  /**
+   * Maps the form data for the Keycloak authentication request.
+   *
+   * @param username the username of the user
+   * @param password the password of the user
+   * @return a {@link MultiValueMap} containing the form data
+   */
   private MultiValueMap<String, String> mappingFormData(
       final String username, final String password) {
     MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();

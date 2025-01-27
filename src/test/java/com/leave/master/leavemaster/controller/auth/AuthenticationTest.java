@@ -19,14 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +30,6 @@ import com.leave.master.leavemaster.dto.auth.LoginRequestDto;
 import com.leave.master.leavemaster.dto.auth.TokenResponseDto;
 import com.leave.master.leavemaster.interceptors.ClientAttributeInterceptor;
 import com.leave.master.leavemaster.security.AuthService;
-import com.leave.master.leavemaster.security.converter.JwtAuthConverter;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -129,27 +122,5 @@ class AuthenticationTest {
 
     // verify
     verify(authService, never()).login(any(LoginRequestDto.class));
-  }
-
-  @TestConfiguration
-  public static class TestConfig {
-    @Bean
-    public JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter() {
-      return new JwtGrantedAuthoritiesConverter();
-    }
-
-    @Bean
-    public JwtAuthConverter jwtAuthConverter(
-        JwtGrantedAuthoritiesConverter converter, LeaveMasterSecurityProperties properties) {
-      return new JwtAuthConverter(converter, properties);
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-      http.csrf(AbstractHttpConfigurer::disable)
-          .authorizeHttpRequests(
-              auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated());
-      return http.build();
-    }
   }
 }

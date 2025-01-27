@@ -31,5 +31,8 @@ public class AbstractUserDto {
   //      message = "Email must be from the domain cognaize.com")
   private String email;
 
+  @NotBlank(message = "job title is mandatory")
+  private String jobTitle;
+
   @NotNull(message = "role is mandatory") private UserRoleEnum role;
 }

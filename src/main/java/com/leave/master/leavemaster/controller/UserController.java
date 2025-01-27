@@ -34,7 +34,7 @@ public class UserController {
    * @return a {@link GenResponse} containing the created user's details.
    */
   @PostMapping("/add")
-  @Secured(Name.R_SEC_USER)
+  @Secured(Name.R_SEC_ADMIN)
   public GenResponse<UserResponseDto> add(
       @RequestBody @Valid final UserRequestDto dto, BindingResult bindingResult) {
     fieldValidator.validateBodyField(bindingResult);

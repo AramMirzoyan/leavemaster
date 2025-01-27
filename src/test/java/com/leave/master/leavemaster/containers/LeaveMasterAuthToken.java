@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.util.function.Function;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.keycloak.OAuth2Constants;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
@@ -25,6 +26,15 @@ import dasniko.testcontainers.keycloak.KeycloakContainer;
 public final class LeaveMasterAuthToken {
 
   @Container private static final KeycloakContainer KEYCLOAK = KeycloakTestContainer.getInstance();
+
+  private final WebClient webClient;
+
+  public LeaveMasterAuthToken() {
+    this.webClient = WebClient.builder().build();
+    if (!KEYCLOAK.isRunning()) {
+      KEYCLOAK.start();
+    }
+  }
 
   private final Function<KeycloakContainer, URIBuilder> authorizationURI =
       keycloakContainer -> {
@@ -47,7 +57,10 @@ public final class LeaveMasterAuthToken {
    * @throws URISyntaxException if the URI for the Keycloak server is invalid
    */
   public String authToken(final String username, final String password) throws URISyntaxException {
-    WebClient webClient = WebClient.builder().build();
+    if (!KEYCLOAK.isRunning()) {
+      throw new IllegalStateException("Keycloak container is not running");
+    }
+
     String result =
         webClient
             .post()
@@ -64,11 +77,11 @@ public final class LeaveMasterAuthToken {
   private MultiValueMap<String, String> mappingFormData(
       final String username, final String password) {
     MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-    formData.put("grant_type", singletonList(PASSWORD.getValue()));
-    formData.put("client_id", singletonList(CLIENT_ID.getValue()));
+    formData.put(OAuth2Constants.GRANT_TYPE, singletonList(PASSWORD.getValue()));
+    formData.put(OAuth2Constants.CLIENT_ID, singletonList(CLIENT_ID.getValue()));
     formData.put("username", singletonList(username));
     formData.put("password", singletonList(password));
-    formData.put("client_secret", singletonList(CLIENT_SECRET.getValue()));
+    formData.put(OAuth2Constants.CLIENT_SECRET, singletonList(CLIENT_SECRET.getValue()));
 
     return formData;
   }

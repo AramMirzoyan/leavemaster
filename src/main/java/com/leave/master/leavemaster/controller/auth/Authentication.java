@@ -47,10 +47,9 @@ public class Authentication {
       requestBody =
           @io.swagger.v3.oas.annotations.parameters.RequestBody(
               content = @Content(schema = @Schema(implementation = LoginRequestDto.class)),
-              description = "This is a request body",
               useParameterTypeSchema = true,
               required = true),
-      method = "POST")
+      method = "${auth.method}")
   public GenResponse<TokenResponseDto> login(
       @RequestBody @Valid final LoginRequestDto source, final HttpServletRequest request) {
     return GenResponse.success(

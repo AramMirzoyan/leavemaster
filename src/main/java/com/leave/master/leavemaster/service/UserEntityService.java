@@ -36,4 +36,16 @@ public interface UserEntityService {
    *     found.
    */
   Try<UserResponseDto> findById(String id);
+
+  /**
+   * Changes the password for a user in Keycloak.
+   *
+   * <p>This method updates the password of the user with the given user ID.
+   *
+   * @param userId The ID of the user whose password will be changed.
+   * @param password The new password to be set.
+   * @return A {@link Try} representing success or failure.
+   */
+  @SuppressWarnings("all")
+  Try<Void> changePassword(String userId, String password);
 }

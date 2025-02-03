@@ -23,6 +23,18 @@ spring:
           issuer-uri: ${leavemaster.security.keycloak.uri}/realms/${leavemaster.security.keycloak.realm}
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${FROM_EMAIL:organization_email}
+    password: ${FROM_EMAIL_PASSWORD:organization_api_password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enabled: true
+
 
 
   # liquibase configuration
@@ -38,12 +50,14 @@ external:
   countryCode: ${COUNTRY_CODE:AM}
   zone: ${ZONE:Asia/Yerevan}
 
-
-leave:
-  unpaid:
-   yearMaxDay: ${MAX_DAY_UNPAID_LEAVE:6}
-  paied:
-    yearMaxDay: ${MAX_DAY_PAID_LEAVE:20}
+application:
+  email:
+    from: aram.mirzoyan@cognaize.com
+  leave:
+    unpaid:
+      yearMaxDay: ${MAX_DAY_UNPAID_LEAVE:6}
+    paied:
+      yearMaxDay: ${MAX_DAY_PAID_LEAVE:20}
 
 
 web:

@@ -15,11 +15,13 @@ import lombok.Getter;
 @Builder
 @Getter
 public class GenResponse<T> {
+  private static final String TIME_STAMP="timestamp";
 
   private final String status;
   private final String message;
   private final Map<String, String> metadata;
   private final T data;
+  private boolean successful;
 
   /**
    * Creates a success response without any data.
@@ -31,7 +33,8 @@ public class GenResponse<T> {
     return GenResponse.<T>builder()
         .status(GenRespStatus.SUCCESS.getValue())
         .message("Request processed successfuly")
-        .metadata(Map.of("timestamp", Instant.now().toString()))
+        .metadata(Map.of(TIME_STAMP, Instant.now().toString()))
+        .successful(true)
         .build();
   }
 
@@ -46,8 +49,9 @@ public class GenResponse<T> {
     return GenResponse.<T>builder()
         .status(GenRespStatus.SUCCESS.getValue())
         .message("Request processed successfuly")
-        .metadata(Map.of("timestamp", Instant.now().toString()))
+        .metadata(Map.of(TIME_STAMP, Instant.now().toString()))
         .data(data)
+        .successful(true)
         .build();
   }
 
@@ -63,8 +67,9 @@ public class GenResponse<T> {
     return GenResponse.<T>builder()
         .status(GenRespStatus.SUCCESS.getValue())
         .message(message.get())
-        .metadata(Map.of("timestamp", Instant.now().toString()))
+        .metadata(Map.of(TIME_STAMP, Instant.now().toString()))
         .data(data)
+        .successful(true)
         .build();
   }
 
@@ -80,8 +85,9 @@ public class GenResponse<T> {
     return GenResponse.<T>builder()
         .status(GenRespStatus.ERROR.getValue())
         .message(message.get())
-        .metadata(Map.of("timestamp", Instant.now().toString()))
+        .metadata(Map.of(TIME_STAMP, Instant.now().toString()))
         .data(data)
+        .successful(false)
         .build();
   }
 
@@ -96,8 +102,9 @@ public class GenResponse<T> {
     return GenResponse.<T>builder()
         .status(GenRespStatus.ERROR.getValue())
         .message("Validation error")
-        .metadata(Map.of("timestamp", Instant.now().toString()))
+        .metadata(Map.of(TIME_STAMP, Instant.now().toString()))
         .data(data)
+        .successful(false)
         .build();
   }
 }

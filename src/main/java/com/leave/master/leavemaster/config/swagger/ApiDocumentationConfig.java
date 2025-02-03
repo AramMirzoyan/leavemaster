@@ -56,12 +56,10 @@ public class ApiDocumentationConfig {
                 .title(properties.getTitle())
                 .version(properties.getVersion())
                 .description(properties.getDescription())
-                .contact(new Contact().name("Contact to leave master application development team"))
-                .license(new License().name("Leave Master License")))
+                .contact(new Contact().name(properties.getContact()))
+                .license(new License().name(properties.getLicense())))
         .addServersItem(
-            new Server()
-                .url("http://localhost:8015/leavemaster-app-api/v1")
-                .description("Local development server"));
+            new Server().url(properties.getUrl()).description(properties.getDescriptionServer()));
   }
 
   /**
@@ -86,5 +84,9 @@ public class ApiDocumentationConfig {
     private String title;
     private String description;
     private String version;
+    private String contact;
+    private String license;
+    private String url;
+    private String descriptionServer;
   }
 }

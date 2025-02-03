@@ -34,6 +34,7 @@ public class EntityToUserDtoConverter implements Converter<UserEntity, UserRespo
         .surname(input.getSurname())
         .email(input.getEmail())
         .role(input.getUserRole().getName())
+        .jobTitle(input.getJobTitle())
         .createdAt(input.getCreatedAt())
         .status(input.getUserStatus())
         .build();

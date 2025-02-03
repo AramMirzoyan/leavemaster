@@ -15,6 +15,7 @@ public enum ServiceErrorCode implements ErrorCode {
   BAD_REQUEST(HttpStatus.BAD_REQUEST, StringUtils.EMPTY),
   DUPLICATE_ENTRY(HttpStatus.BAD_REQUEST, "Duplicate entry for email or other constraint violated"),
   CAN_NOT_CREATE_USER(HttpStatus.INTERNAL_SERVER_ERROR, "Can not create user"),
+  CAN_NOT_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR, "Can not send email"),
   UNEXPECTED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
 
   private final HttpStatus status;

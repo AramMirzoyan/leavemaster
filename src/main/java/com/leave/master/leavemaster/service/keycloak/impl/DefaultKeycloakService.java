@@ -22,6 +22,7 @@ import com.leave.master.leavemaster.service.keycloak.KeycloakService;
 import com.leave.master.leavemaster.service.keycloak.model.UserRepresentationBuilder;
 import com.leave.master.leavemaster.utils.Logging;
 
+import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -139,6 +140,36 @@ public class DefaultKeycloakService extends AbstractKeycloakService implements K
   }
 
   /**
+   * Deletes a user from Keycloak.
+   *
+   * <p>Subclasses may override this method to add additional logic before or after user deletion.
+   *
+   * @param userId The ID of the user to be deleted.
+   */
+  @Override
+  public void deleteUser(String userId) {
+    getRealmResource()
+        .map(RealmResource::users)
+        .map(this::userRepository)
+        .onSuccess(repository -> repository.deleteUser(userId));
+  }
+
+  /**
+   * Changes the password of a user in Keycloak.
+   *
+   * <p>Subclasses may override this method to enforce additional security checks.
+   *
+   * @param userId The ID of the user whose password will be changed.
+   * @param password The new password.
+   * @return A Try<Void> representing success or failure.
+   */
+  @Override
+  public Try<Void> changePassword(final String userId, final String password) {
+    log.debug("start to changed password");
+    return changedUserPassword(userId, password);
+  }
+
+  /**
    * Creates a {@link CredentialRepresentation} for a user's password.
    *
    * @param password the password to assign.
@@ -152,6 +183,32 @@ public class DefaultKeycloakService extends AbstractKeycloakService implements K
     credential.setValue(password);
     log.info("finish to assigned password for user");
     return credential;
+  }
+
+  /**
+   * Updates the password of a user in Keycloak.
+   *
+   * <p>Designed to be overridden by subclasses if necessary. Uses a {@link
+   * CredentialRepresentation} for setting the new password.
+   *
+   * @param userId The ID of the user whose password is being changed.
+   * @param password The new password.
+   * @return A Try<Void> representing success or failure.
+   */
+  protected Try<Void> changedUserPassword(final String userId, final String password) {
+    CredentialRepresentation credentialRepresentation = passwordCredential(password);
+
+    return Try.run(
+        () ->
+            getRealmResource()
+                .map(RealmResource::users)
+                .andThen(users -> users.get(userId).resetPassword(credentialRepresentation))
+                .onFailure(this::recoverFromUnexpectedError));
+  }
+
+  @SuppressWarnings("all")
+  private Try<Void> recoverFromUnexpectedError(final Throwable th) {
+    return Try.failure(new ServiceException(ServiceErrorCode.UNEXPECTED_ERROR, th::getMessage));
   }
 
   /**

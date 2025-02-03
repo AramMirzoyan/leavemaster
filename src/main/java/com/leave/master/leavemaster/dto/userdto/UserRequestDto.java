@@ -1,10 +1,10 @@
 package com.leave.master.leavemaster.dto.userdto;
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder(toBuilder = true)
@@ -13,6 +13,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRequestDto extends AbstractUserDto {
-  @NotBlank(message = "password is mandatory")
-  private String password;
+  @Builder.Default @JsonIgnore private String password = UUID.randomUUID().toString();
 }

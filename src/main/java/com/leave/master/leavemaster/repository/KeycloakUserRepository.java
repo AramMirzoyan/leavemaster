@@ -101,6 +101,7 @@ public class KeycloakUserRepository {
    * @param userResource the {@link UserResource} of the user.
    * @return a {@link Map} of client IDs to role names.
    */
+  @SuppressWarnings("java:S1144")
   private Map<String, List<String>> retrivUserRole(
       final String userId, final UserResource userResource) {
     return usersResource
@@ -124,5 +125,14 @@ public class KeycloakUserRepository {
   public boolean isUserExistByUsername(final String username) {
     List<UserRepresentation> search = usersResource.search(username, true);
     return search != null && !search.isEmpty();
+  }
+
+  /**
+   * delete user by user id.
+   *
+   * @param userId the user id in keycloak
+   */
+  public void deleteUser(final String userId) {
+    usersResource.delete(userId);
   }
 }

@@ -26,4 +26,15 @@ public class Utils {
       Logging.onWarning(message);
     }
   }
+
+  /**
+   * Get user full name join first name and last name in one line.
+   *
+   * @param firstName the user name.
+   * @param lastName the user surname.
+   * @return full name of user.
+   */
+  public static String getFullName(final String firstName, final String lastName) {
+    return "%s %s".formatted(firstName, lastName);
+  }
 }

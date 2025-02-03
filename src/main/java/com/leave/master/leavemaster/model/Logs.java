@@ -15,18 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class Logs extends BaseEntity {
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "leave_id")
-  private LeaveEntity leaveEntity;
+  @Column(name = "leave_id")
+  private String leaveId;
 
   @Column(name = "leave_status")
   private LeaveStatus leaveStatus;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "leave_type_id")
-  private LeaveTypeEntity leaveTypeEntity;
+  @Column(name = "leave_type_id")
+  private String leaveTypeId;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_entity_id")
-  private UserEntity userEntity;
+  @Column(name = "user_entity_id")
+  private String userId;
 }
